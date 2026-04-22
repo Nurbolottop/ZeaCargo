@@ -1,5 +1,2 @@
-from django.views.generic import TemplateView
-
-
-class HomeView(TemplateView):
-    template_name = 'index.html'
+# apps/base/views.py
+# Главная страница (index.html) обслуживается отдельно другими разработчиками

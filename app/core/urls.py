@@ -6,9 +6,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # Главная — лендинг (apps.base)
-    path('', include('apps.base.urls', namespace='base')),
-
     # Авторизация
     path('auth/', include('apps.accounts.urls', namespace='accounts')),
 
@@ -21,5 +18,3 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    # Алиас для index.html — использует относительные пути assets/css/...
-    urlpatterns += static('/assets/', document_root=settings.BASE_DIR / 'static' / 'assets')
