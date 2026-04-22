@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -7,9 +8,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/global.css">
-  <link rel="stylesheet" href="../assets/css/components.css">
-  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="{% static 'assets/css/global.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/animations.css' %}">
 
   <style>
     body {
@@ -371,7 +372,7 @@
     <!-- Left: Branding -->
     <div class="auth-left">
       <div class="auth-brand animate-fade-up">
-        <a href="../index.html" class="auth-logo">
+        <a href="{% url 'home' %}" class="auth-logo">
           <div class="auth-logo-icon">📦</div>
           <span class="auth-logo-name">ZeaCargo</span>
         </a>
@@ -465,7 +466,7 @@
       <div class="demo-accounts">
         <div class="demo-accounts-label">Быстрый демо-вход</div>
         <div class="demo-btns">
-          <a href="../superadmin/dashboard.html" class="demo-btn" id="demo-superadmin">
+          <a href="{% url 'superadmin_dashboard' %}" class="demo-btn" id="demo-superadmin">
             <div class="demo-btn-icon" style="background: rgba(245,158,11,0.15);">👑</div>
             <div class="demo-btn-info">
               <div class="demo-btn-name">Суперадмин</div>
@@ -474,7 +475,7 @@
             <span class="demo-btn-arrow">→</span>
           </a>
 
-          <a href="../crm/dashboard.html" class="demo-btn" id="demo-crm">
+          <a href="{% url 'crm_dashboard' %}" class="demo-btn" id="demo-crm">
             <div class="demo-btn-icon" style="background: rgba(108,99,255,0.15);">🏢</div>
             <div class="demo-btn-info">
               <div class="demo-btn-name">Администратор CRM</div>
@@ -489,14 +490,14 @@
 
   <div class="toast-container"></div>
 
-  <script src="../assets/js/app.js"></script>
+  <script src="{% static 'assets/js/app.js' %}"></script>
   <script>
     let currentRole = 'admin';
 
     const roleRedirects = {
-      superadmin: '../superadmin/dashboard.html',
-      admin:      '../crm/dashboard.html',
-      operator:   '../crm/dashboard.html'
+      superadmin: '{% url "superadmin_dashboard" %}',
+      admin: '{% url "crm_dashboard" %}',
+      operator: '{% url "crm_dashboard" %}'
     };
 
     function setRole(role, btn) {

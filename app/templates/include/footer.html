@@ -1,0 +1,54 @@
+<footer class="landing-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:0">
+          <div class="nav-logo-icon">{{ site_settings.logo_emoji }}</div>
+          <span class="nav-logo-name">{{ site_settings.site_name }}</span>
+        </div>
+        <p>{{ site_settings.footer_about }}</p>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукт</div>
+        <div class="footer-links">
+          <a href="#features">Возможности</a>
+          <a href="#pricing">Тарифы</a>
+          <a href="auth/login.html">Демо-доступ</a>
+          <a href="#faq">FAQ</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Разделы</div>
+        <div class="footer-links">
+          <a href="crm/dashboard.html">CRM для карго</a>
+          <a href="client/catalog.html">Каталог товаров</a>
+          <a href="bot/simulator.html">Telegram-бот</a>
+          <a href="superadmin/dashboard.html">Суперадмин</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <div class="footer-links">
+          <a href="#">О нас</a>
+          <a href="#">Контакты</a>
+          <a href="#">Политика</a>
+          <a href="#">Условия</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">{{ site_settings.footer_copyright }}</div>
+      <div class="footer-social">
+        <a href="{{ site_settings.telegram_url|default:'#' }}" class="social-btn" title="Telegram">Tg</a>
+        <a href="{{ site_settings.whatsapp_url|default:'#' }}" class="social-btn" title="WhatsApp">Wa</a>
+        <a href="{{ site_settings.instagram_url|default:'#' }}" class="social-btn" title="Instagram">Ig</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container"></div>

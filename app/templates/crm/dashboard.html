@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -6,9 +7,9 @@
   <title>Дашборд — ZeaCargo CRM</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/global.css">
-  <link rel="stylesheet" href="../assets/css/components.css">
-  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="{% static 'assets/css/global.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/animations.css' %}">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-bottom: 28px; }
@@ -48,14 +49,14 @@
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <a href="../index.html" class="sidebar-logo">
+  <a href="{% url 'home' %}" class="sidebar-logo">
     <div class="sidebar-logo-icon">📦</div>
     <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
   </a>
   <nav class="sidebar-nav">
     <div class="sidebar-section">
       <div class="sidebar-section-label">Главное</div>
-      <a href="../crm/dashboard.html" class="sidebar-link active"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="{% url 'crm_dashboard' %}" class="sidebar-link active"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
       <a href="../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
       <a href="../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
       <a href="../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
@@ -73,7 +74,7 @@
     <div class="sidebar-section">
       <div class="sidebar-section-label">Система</div>
       <a href="../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
-      <a href="../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+      <a href="{% url 'login' %}" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
     </div>
   </nav>
   <div class="sidebar-footer">
@@ -99,7 +100,7 @@
       <span class="topbar-notification-dot"></span>
     </button>
     <button class="topbar-btn" onclick="window.location='settings/index.html'">⚙️</button>
-    <a href="../auth/login.html" class="btn btn-ghost btn-sm">Выйти</a>
+    <a href="{% url 'login' %}" class="btn btn-ghost btn-sm">Выйти</a>
   </div>
 </header>
 
@@ -338,7 +339,7 @@
 
 <div class="toast-container"></div>
 
-<script src="../assets/js/app.js"></script>
+<script src="{% static 'assets/js/app.js' %}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   // Orders line chart

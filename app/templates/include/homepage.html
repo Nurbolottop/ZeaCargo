@@ -1,0 +1,349 @@
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      {{ homepage_settings.badge_text }}
+    </div>
+
+    <h1 class="hero-title">
+      {{ homepage_settings.hero_title }}<br>
+      для <span class="gradient-text">{{ homepage_settings.hero_highlight }}</span>
+    </h1>
+
+    <p class="hero-desc">
+      {{ homepage_settings.hero_description }}
+    </p>
+
+    <div class="hero-actions">
+      <a href="{{ homepage_settings.hero_primary_url }}" class="btn btn-primary btn-lg" id="hero-demo-btn">
+        {{ homepage_settings.hero_primary_text }}
+      </a>
+      <a href="{{ homepage_settings.hero_secondary_url }}" class="btn btn-secondary btn-lg">
+        {{ homepage_settings.hero_secondary_text }}
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat-item">
+        <div class="hero-stat-num">{{ homepage_settings.stats_companies_value }}</div>
+        <div class="hero-stat-label">{{ homepage_settings.stats_companies_label }}</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-num">{{ homepage_settings.stats_clients_value }}</div>
+        <div class="hero-stat-label">{{ homepage_settings.stats_clients_label }}</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-num">{{ homepage_settings.stats_orders_value }}</div>
+        <div class="hero-stat-label">{{ homepage_settings.stats_orders_label }}</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-num">{{ homepage_settings.stats_uptime_value }}</div>
+        <div class="hero-stat-label">{{ homepage_settings.stats_uptime_label }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="demo-preview stagger-children">
+    <div class="demo-window animate-fade-up">
+      <div class="demo-titlebar">
+        <div class="demo-dot demo-dot-r"></div>
+        <div class="demo-dot demo-dot-y"></div>
+        <div class="demo-dot demo-dot-g"></div>
+        <div class="demo-url">app.zeacargo.com/crm/dashboard</div>
+      </div>
+      <div class="demo-screenshot">
+        <div class="demo-sidebar-mock">
+          <div class="demo-nav-item active">Панель</div>
+          <div class="demo-nav-item">Клиенты</div>
+          <div class="demo-nav-item">Заказы</div>
+          <div class="demo-nav-item">Финансы</div>
+          <div class="demo-nav-item">Логистика</div>
+          <div class="demo-nav-item">Каталог</div>
+          <div class="demo-nav-item">Уведомления</div>
+        </div>
+        <div class="demo-main-mock">
+          <div class="demo-stat-row">
+            <div class="demo-stat-box"><div class="demo-stat-val">248</div><div class="demo-stat-lbl">Клиентов</div></div>
+            <div class="demo-stat-box"><div class="demo-stat-val" style="color:#FBBF24">184</div><div class="demo-stat-lbl">В пути</div></div>
+            <div class="demo-stat-box"><div class="demo-stat-val" style="color:#34D399">42</div><div class="demo-stat-lbl">Готовы</div></div>
+            <div class="demo-stat-box"><div class="demo-stat-val" style="color:#F87171">892K</div><div class="demo-stat-lbl">Долги</div></div>
+          </div>
+          <div class="demo-table-mock">
+            <div class="demo-table-row">
+              <span style="flex:1.5">Трек-номер</span>
+              <span style="flex:1.5">Клиент</span>
+              <span style="flex:1">Вес</span>
+              <span style="flex:1">Статус</span>
+              <span style="flex:1">Оплата</span>
+            </div>
+            <div class="demo-table-row" style="color:#94A3B8">
+              <span style="flex:1.5">CN2024110001</span>
+              <span style="flex:1.5">Нурбек А.</span>
+              <span style="flex:1">1.2 кг</span>
+              <span style="flex:1"><span class="demo-tag demo-tag-yellow">В пути</span></span>
+              <span style="flex:1"><span class="demo-tag demo-tag-red">Долг</span></span>
+            </div>
+            <div class="demo-table-row" style="color:#94A3B8">
+              <span style="flex:1.5">CN2024110002</span>
+              <span style="flex:1.5">Айгуль Б.</span>
+              <span style="flex:1">0.5 кг</span>
+              <span style="flex:1"><span class="demo-tag demo-tag-green">Готов</span></span>
+              <span style="flex:1"><span class="demo-tag demo-tag-green">Оплачено</span></span>
+            </div>
+            <div class="demo-table-row" style="color:#94A3B8">
+              <span style="flex:1.5">CN2024110003</span>
+              <span style="flex:1.5">Дамир С.</span>
+              <span style="flex:1">3.0 кг</span>
+              <span style="flex:1"><span class="demo-tag demo-tag-yellow">Склад</span></span>
+              <span style="flex:1"><span class="demo-tag demo-tag-yellow">Частично</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="section-header stagger-children" style="max-width:640px; margin:0 auto 64px; text-align:center; padding:0 32px;">
+    <div class="section-tag">Возможности</div>
+    <h2 class="section-title animate-fade-up delay-100">Все, что нужно карго-бизнесу</h2>
+    <p class="section-desc animate-fade-up delay-200">От учета клиентов до Telegram-бота, одна платформа для всего</p>
+  </div>
+
+  <div class="features-grid stagger-children">
+    <div class="feature-card animate-fade-up" style="--feat-color: #6C63FF; --feat-bg: rgba(108,99,255,0.12);">
+      <div class="feature-icon">CRM</div>
+      <div class="feature-title">CRM-система</div>
+      <div class="feature-desc">Управляйте клиентами, заказами, статусами и долгами через удобный интерфейс. Вся история в одном месте.</div>
+    </div>
+
+    <div class="feature-card animate-fade-up delay-100" style="--feat-color: #3B82F6; --feat-bg: rgba(59,130,246,0.12);">
+      <div class="feature-icon">Bot</div>
+      <div class="feature-title">Telegram-бот</div>
+      <div class="feature-desc">Клиенты получают уведомления, проверяют статус заказов и делают заявки через Telegram без звонков.</div>
+    </div>
+
+    <div class="feature-card animate-fade-up delay-200" style="--feat-color: #10B981; --feat-bg: rgba(16,185,129,0.12);">
+      <div class="feature-icon">Cat</div>
+      <div class="feature-title">Каталог товаров</div>
+      <div class="feature-desc">Ведите каталог товаров с фото и ценами. Клиенты оставляют заявки на выкуп прямо с сайта или из бота.</div>
+    </div>
+
+    <div class="feature-card animate-fade-up delay-300" style="--feat-color: #F59E0B; --feat-bg: rgba(245,158,11,0.12);">
+      <div class="feature-icon">Fin</div>
+      <div class="feature-title">Финансовый учет</div>
+      <div class="feature-desc">Учет долгов, частичных оплат и истории платежей с быстрым доступом по клиентам и заказам.</div>
+    </div>
+
+    <div class="feature-card animate-fade-up delay-400" style="--feat-color: #8B5CF6; --feat-bg: rgba(139,92,246,0.12);">
+      <div class="feature-icon">Log</div>
+      <div class="feature-title">Логистика</div>
+      <div class="feature-desc">Контроль движения посылок, статусы доставки, массовые обновления и прогноз прибытия.</div>
+    </div>
+
+    <div class="feature-card animate-fade-up delay-500" style="--feat-color: #EC4899; --feat-bg: rgba(236,72,153,0.12);">
+      <div class="feature-icon">Hub</div>
+      <div class="feature-title">Мультикарго</div>
+      <div class="feature-desc">Подключайте несколько карго-компаний с полной изоляцией данных и единым супер-админом.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how" style="background: rgba(255,255,255,0.01);">
+  <div class="section-header" style="max-width:640px; margin:0 auto 64px; text-align:center; padding:0 32px;">
+    <div class="section-tag">Как работает</div>
+    <h2 class="section-title">Начать легко, 3 простых шага</h2>
+  </div>
+
+  <div class="how-steps stagger-children">
+    <div class="how-step animate-fade-up">
+      <div class="how-step-num">1</div>
+      <div class="how-step-title">Регистрация компании</div>
+      <div class="how-step-desc">Суперадмин создает профиль вашей карго-компании и выдает доступ администратору.</div>
+    </div>
+
+    <div class="how-step animate-fade-up delay-200">
+      <div class="how-step-num">2</div>
+      <div class="how-step-title">Настройка системы</div>
+      <div class="how-step-desc">Добавляете адреса, тарифы, подключаете Telegram-бот и приглашаете сотрудников.</div>
+    </div>
+
+    <div class="how-step animate-fade-up delay-400">
+      <div class="how-step-num">3</div>
+      <div class="how-step-title">Работа начата</div>
+      <div class="how-step-desc">Создаете клиентов и заказы, а клиенты отслеживают посылки через бота.</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="section-header" style="max-width:640px; margin:0 auto 64px; text-align:center; padding:0 32px;">
+    <div class="section-tag">Тарифы</div>
+    <h2 class="section-title">Прозрачные цены</h2>
+    <p class="section-desc">Выберите план по размеру вашего бизнеса без скрытых платежей.</p>
+  </div>
+
+  <div class="pricing-grid stagger-children">
+    <div class="pricing-card animate-fade-up">
+      <div class="pricing-plan">Старт</div>
+      <div class="pricing-price">
+        <span class="pricing-amount">9 900</span>
+        <span class="pricing-period">сом/мес</span>
+      </div>
+      <div class="pricing-desc">Для небольших карго с базовыми потребностями</div>
+      <ul class="pricing-features">
+        <li>До 100 клиентов</li>
+        <li>Базовый CRM</li>
+        <li>Заказы и статусы</li>
+        <li>Telegram-бот</li>
+        <li class="disabled">Каталог товаров</li>
+        <li class="disabled">Финансовая аналитика</li>
+        <li class="disabled">API-доступ</li>
+      </ul>
+      <a href="auth/login.html" class="btn btn-secondary w-full">Начать →</a>
+    </div>
+
+    <div class="pricing-card featured animate-fade-up delay-100">
+      <div class="pricing-badge">Популярный</div>
+      <div class="pricing-plan">Бизнес</div>
+      <div class="pricing-price">
+        <span class="pricing-amount">24 900</span>
+        <span class="pricing-period">сом/мес</span>
+      </div>
+      <div class="pricing-desc">Для активно растущих карго-компаний</div>
+      <ul class="pricing-features">
+        <li>До 500 клиентов</li>
+        <li>Полный CRM</li>
+        <li>Заказы и статусы</li>
+        <li>Telegram-бот</li>
+        <li>Каталог товаров</li>
+        <li>Финансовая аналитика</li>
+        <li class="disabled">API-доступ</li>
+      </ul>
+      <a href="auth/login.html" class="btn btn-primary w-full">Начать →</a>
+    </div>
+
+    <div class="pricing-card animate-fade-up delay-200">
+      <div class="pricing-plan">Корпорат</div>
+      <div class="pricing-price">
+        <span class="pricing-amount">59 900</span>
+        <span class="pricing-period">сом/мес</span>
+      </div>
+      <div class="pricing-desc">Для крупных карго с большим объемом и командой</div>
+      <ul class="pricing-features">
+        <li>Без лимита клиентов</li>
+        <li>Полный CRM</li>
+        <li>Заказы и статусы</li>
+        <li>Telegram-бот</li>
+        <li>Каталог товаров</li>
+        <li>Финансовая аналитика</li>
+        <li>API-доступ</li>
+      </ul>
+      <a href="auth/login.html" class="btn btn-secondary w-full">Связаться →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background: rgba(255,255,255,0.01);">
+  <div class="section-header" style="max-width:640px; margin:0 auto 64px; text-align:center; padding:0 32px;">
+    <div class="section-tag">Отзывы</div>
+    <h2 class="section-title">Что говорят клиенты</h2>
+  </div>
+
+  <div class="testimonials-grid stagger-children">
+    <div class="testimonial-card animate-fade-up">
+      <div class="testimonial-quote">"</div>
+      <p class="testimonial-text">ZeaCargo полностью изменил наш подход к учету. Раньше все было в таблицах, теперь каждый заказ отслеживается в реальном времени.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">АС</div>
+        <div>
+          <div class="testimonial-name">Азамат Сейткали</div>
+          <div class="testimonial-company">AsiaCargo Pro, Бишкек</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card animate-fade-up delay-100">
+      <div class="testimonial-quote">"</div>
+      <p class="testimonial-text">Клиенты сами проверяют статус посылок в боте, и нагрузка на менеджеров заметно снизилась.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background: linear-gradient(135deg, #10B981, #059669)">МК</div>
+        <div>
+          <div class="testimonial-name">Малика Каримова</div>
+          <div class="testimonial-company">SilkRoute Cargo, Ташкент</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card animate-fade-up delay-200">
+      <div class="testimonial-quote">"</div>
+      <p class="testimonial-text">Финансовый учет и контроль долгов наконец стали прозрачными и удобными для команды.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706)">ДТ</div>
+        <div>
+          <div class="testimonial-name">Данияр Тлеухан</div>
+          <div class="testimonial-company">RusCargo KZ, Алматы</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="section-header" style="max-width:640px; margin:0 auto 64px; text-align:center; padding:0 32px;">
+    <div class="section-tag">FAQ</div>
+    <h2 class="section-title">Частые вопросы</h2>
+  </div>
+
+  <div class="faq-list">
+    <div class="accordion-item">
+      <div class="accordion-header" id="faq1">
+        Как быстро можно начать работу?
+        <span class="accordion-icon">⌄</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-content">Суперадмин создает профиль компании за несколько минут, после чего можно сразу начинать работу.</div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        Можно ли подключить несколько карго в одну систему?
+        <span class="accordion-icon">⌄</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-content">Да, платформа поддерживает несколько компаний с отдельными данными и единым управлением.</div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header">
+        Есть ли мобильное приложение?
+        <span class="accordion-icon">⌄</span>
+      </div>
+      <div class="accordion-body">
+        <div class="accordion-content">Веб-интерфейс адаптирован под мобильные устройства, а основные операции доступны через Telegram-бота.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container section-sm">
+  <div class="cta-section animate-fade-up">
+    <h2 class="cta-title">{{ homepage_settings.cta_title }}</h2>
+    <p class="cta-desc">{{ homepage_settings.cta_description }}</p>
+    <div class="cta-actions">
+      <a href="{{ homepage_settings.cta_primary_url }}" class="btn btn-primary btn-lg" id="cta-demo-btn">
+        {{ homepage_settings.cta_primary_text }}
+      </a>
+      <a href="{{ homepage_settings.cta_secondary_url }}" class="btn btn-secondary btn-lg">
+        {{ homepage_settings.cta_secondary_text }}
+      </a>
+    </div>
+  </div>
+</section>

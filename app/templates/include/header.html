@@ -1,0 +1,20 @@
+<nav class="landing-nav" id="nav">
+  <div class="nav-inner">
+    <a href="{% url 'home' %}" class="nav-logo">
+      <div class="nav-logo-icon">{{ site_settings.logo_emoji }}</div>
+      <span class="nav-logo-name">{{ site_settings.site_name }}</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#features">Возможности</a>
+      <a href="#how">Как работает</a>
+      <a href="#pricing">Тарифы</a>
+      <a href="#faq">FAQ</a>
+    </div>
+
+    <div class="nav-actions">
+      <a href="auth/login.html" class="btn btn-ghost">Войти</a>
+      <a href="auth/login.html" class="btn btn-primary">Демо →</a>
+    </div>
+  </div>
+</nav>
