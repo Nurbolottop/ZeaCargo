@@ -1,16 +1,12 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Компании — ZeaCargo Суперадмин</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/global.css">
-  <link rel="stylesheet" href="../assets/css/components.css">
-  <link rel="stylesheet" href="../assets/css/animations.css">
-  <style>
-    /* Wide modal for company form */
+{% load static %}
+{% extends 'superadmin/base_superadmin.html' %}
+
+{% block title %}Карго{% endblock %}
+{% block page_title %}Суперадмин · Карго{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Wide modal for company form */
     .modal-wide { max-width: 760px; }
     .modal-xl   { max-width: 900px; }
 
@@ -45,56 +41,11 @@
 
     /* tab indicator dots in tab labels */
     .tab-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); margin-left: 6px; vertical-align: middle; }
-  </style>
-</head>
-<body class="bg-mesh">
+</style>
+{% endblock %}
 
-<!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar">
-  <a href="../index.html" class="sidebar-logo">
-    <div class="sidebar-logo-icon">👑</div>
-    <div class="sidebar-logo-text">
-      <div class="sidebar-logo-title">ZeaCargo</div>
-      <div class="sidebar-logo-sub">Суперадмин</div>
-    </div>
-  </a>
-  <nav class="sidebar-nav">
-    <div class="sidebar-section"><div class="sidebar-section-label">Платформа</div>
-      <a href="dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
-      <a href="companies.html" class="sidebar-link active"><span class="sidebar-link-icon">🏢</span><span class="sidebar-link-text">Карго</span><span class="sidebar-link-badge">4</span></a>
-    </div>
-    <div class="sidebar-section"><div class="sidebar-section-label">Управление</div>
-      <a href="settings.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
-    </div>
-    <div class="sidebar-section"><div class="sidebar-section-label">Также</div>
-      <a href="../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
-    </div>
-  </nav>
-  <div class="sidebar-footer">
-    <a href="settings.html" class="sidebar-user">
-      <div class="sidebar-user-avatar" style="background:linear-gradient(135deg,#F59E0B,#D97706);">СА</div>
-      <div class="sidebar-user-info"><div class="sidebar-user-name">Суперадмин</div><div class="sidebar-user-role">Платформа ZeaCargo</div></div>
-    </a>
-  </div>
-</aside>
-
-<!-- TOPBAR -->
-<header class="topbar" id="topbar">
-  <div class="topbar-left">
-    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
-    <div class="topbar-breadcrumb"><span style="color:var(--text-muted);">Суперадмин</span><span style="color:var(--text-muted);">/</span><span>Карго</span></div>
-  </div>
-  <div class="topbar-right">
-    <button class="topbar-btn">🔔</button>
-    <a href="settings.html" class="btn btn-primary btn-sm">⚙️ Настройки</a>
-  </div>
-</header>
-
-<div class="app-layout">
-  <div class="main-content" id="mainContent">
-    <div class="page-content">
-
-      <div class="page-header animate-fade-up">
+{% block content %}
+<div class="page-header animate-fade-up">
         <div>
           <h1>Карго</h1>
           <p>Всего карго на платформе: <strong id="totalCount">4</strong></p>
@@ -145,14 +96,9 @@
           </table>
         </div>
       </div>
+{% endblock %}
 
-    </div>
-  </div>
-</div>
-
-<!-- =============================================
-     ADD / EDIT COMPANY MODAL (wide, tabbed)
-     ============================================= -->
+{% block extra_js %}
 <div class="modal-overlay" id="companyModal">
   <div class="modal modal-xl" style="padding:0; display:flex; flex-direction:column; max-height:90vh;">
 
@@ -397,8 +343,6 @@
 
   </div>
 </div>
-
-<!-- BLOCK CONFIRM MODAL -->
 <div class="modal-overlay" id="blockModal">
   <div class="modal modal-sm">
     <div class="modal-header"><div class="modal-title">⛔ Заблокировать компанию?</div><button class="modal-close" data-modal-close>✕</button></div>
@@ -406,9 +350,6 @@
     <div class="modal-footer"><button class="btn btn-secondary" data-modal-close>Отмена</button><button class="btn btn-danger" onclick="confirmBlock()">Заблокировать</button></div>
   </div>
 </div>
-
-<div class="toast-container"></div>
-<script src="../assets/js/app.js"></script>
 <script>
 let companies = JSON.parse(JSON.stringify(ZeaData.companies));
 let blockTarget = null;
@@ -637,5 +578,4 @@ function genPass() {
 document.getElementById('searchInput').addEventListener('input', ZeaUtils.debounce(applyFilter, 250));
 renderTable(companies);
 </script>
-</body>
-</html>
+{% endblock %}

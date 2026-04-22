@@ -40,16 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third-party
-    'ckeditor',
-    'ckeditor_uploader',
     'django_resized',
 
     # Local apps
     'apps.base',
-    'apps.cms',
-    'apps.contacts',
+    'apps.accounts',
+    'apps.cargo',
     'apps.clients',
     'apps.orders',
+    'apps.finance',
+    'apps.catalog',
+    'apps.notifications',
+    'apps.superadmin',
+    'apps.crm',
 ]
 
 # =============================================================================
@@ -157,18 +160,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # =============================================================================
-# CKEDITOR (РЕДАКТОР CKEDITOR)
+# AUTH (АУТЕНТИФИКАЦИЯ)
 # =============================================================================
 
-CKEDITOR_UPLOAD_PATH = 'uploads/'
-CKEDITOR_IMAGE_BACKEND = "pillow"
+AUTH_USER_MODEL = 'accounts.CustomUser'
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
 
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'full',
-        'height': 300,
-        'width': '100%',
-    },
-}
+
+

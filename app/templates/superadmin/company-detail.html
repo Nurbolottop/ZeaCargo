@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Детали компании — ZeaCargo Суперадмин</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/global.css">
-  <link rel="stylesheet" href="../assets/css/components.css">
-  <link rel="stylesheet" href="../assets/css/animations.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    /* Layout */
+{% load static %}
+{% extends 'superadmin/base_superadmin.html' %}
+
+{% block title %}Детали компании{% endblock %}
+{% block page_title %}Суперадмин · Детали компании{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Layout */
     .detail-layout { display: grid; grid-template-columns: 340px 1fr; gap: 24px; }
     @media(max-width:1000px){ .detail-layout{grid-template-columns:1fr;} }
 
@@ -72,64 +67,14 @@
     .detail-tab-panel.active { display:block; }
 
     .chart-wrap { height:240px; position:relative; }
-  </style>
-</head>
-<body class="bg-mesh">
+</style>
+{% endblock %}
 
-<!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar">
-  <a href="../index.html" class="sidebar-logo">
-    <div class="sidebar-logo-icon">👑</div>
-    <div class="sidebar-logo-text">
-      <div class="sidebar-logo-title">ZeaCargo</div>
-      <div class="sidebar-logo-sub">Суперадмин</div>
-    </div>
-  </a>
-  <nav class="sidebar-nav">
-    <div class="sidebar-section"><div class="sidebar-section-label">Платформа</div>
-      <a href="dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
-      <a href="companies.html" class="sidebar-link"><span class="sidebar-link-icon">🏢</span><span class="sidebar-link-text">Компании</span><span class="sidebar-link-badge">4</span></a>
-    </div>
-    <div class="sidebar-section"><div class="sidebar-section-label">Управление</div>
-      <a href="settings.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
-    </div>
-    <div class="sidebar-section"><div class="sidebar-section-label">Также</div>
-      <a href="../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
-    </div>
-  </nav>
-  <div class="sidebar-footer">
-    <a href="settings.html" class="sidebar-user">
-      <div class="sidebar-user-avatar" style="background:linear-gradient(135deg,#F59E0B,#D97706);">СА</div>
-      <div class="sidebar-user-info"><div class="sidebar-user-name">Суперадмин</div><div class="sidebar-user-role">Платформа ZeaCargo</div></div>
-    </a>
-  </div>
-</aside>
-
-<!-- TOPBAR -->
-<header class="topbar" id="topbar">
-  <div class="topbar-left">
-    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
-    <div class="topbar-breadcrumb">
-      <a href="dashboard.html" style="color:var(--text-muted);text-decoration:none;">Суперадмин</a>
-      <span style="color:var(--text-muted);">/</span>
-      <a href="companies.html" style="color:var(--text-muted);text-decoration:none;">Компании</a>
-      <span style="color:var(--text-muted);">/</span>
-      <span id="breadcrumbName">RusCargo KZ</span>
-    </div>
-  </div>
-  <div class="topbar-right">
-    <button class="topbar-btn">🔔</button>
-  </div>
-</header>
-
-<div class="app-layout">
-  <div class="main-content" id="mainContent">
-    <div class="page-content">
-
-      <!-- Page header -->
+{% block content %}
+<!-- Page header -->
       <div class="page-header animate-fade-up">
         <div>
-          <a href="companies.html" class="btn btn-ghost btn-sm" style="padding-left:0;margin-bottom:8px;">← Все компании</a>
+          <a href="/superadmin/companies/" class="btn btn-ghost btn-sm" style="padding-left:0;margin-bottom:8px;">← Все компании</a>
           <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
             <h1 id="pageTitle">RusCargo KZ</h1>
             <span class="badge badge-success" id="pageBadgeStatus">Активна</span>
@@ -167,176 +112,11 @@
         </div>
         <div class="mini-stat">
           <div class="mini-stat-label">📅 Подключена</div>
-          <div class="mini-stat-value" style="font-size:16px;">15.03.2024</div>
-        </div>
-      </div>
+          <div class="mini-stat-value" style="font-size:16px;">15.03.2024
+{% endblock %}
 
-      <!-- Main content layout -->
-      <div class="detail-layout animate-fade-up delay-200">
+{% block extra_js %}
 
-        <!-- LEFT: structured info card -->
-        <div style="display:flex;flex-direction:column;gap:16px;">
-
-          <!-- 1. Основное -->
-          <div class="card">
-            <div class="info-section">
-              <div class="info-section-title"><span>🏢</span> Основная информация</div>
-              <div class="info-row"><span class="il">Код компании</span><span class="iv"><span class="code-chip">RU-001</span></span></div>
-              <div class="info-row"><span class="il">Город</span><span class="iv">Алматы</span></div>
-              <div class="info-row"><span class="il">Филиал</span><span class="iv dim">Главный офис</span></div>
-              <div class="info-row"><span class="il">Email (администратора)</span><span class="iv"><a href="mailto:admin@ruscargo.com">admin@ruscargo.com</a></span></div>
-              <div class="info-row"><span class="il">Тарифный план</span><span class="iv"><span class="badge badge-purple">Бизнес</span></span></div>
-              <div class="info-row"><span class="il">Тариф оплачен до</span><span class="iv">15.12.2024</span></div>
-              <div class="info-row"><span class="il">Дата подключения</span><span class="iv">15.03.2024</span></div>
-            </div>
-          </div>
-
-          <!-- 2. Контакты -->
-          <div class="card">
-            <div class="info-section">
-              <div class="info-section-title"><span>📍</span> Kontaktные данные</div>
-              <div class="info-row"><span class="il">Адрес офиса</span><span class="iv">г. Алматы, пр. Абая 12, оф. 301</span></div>
-              <div class="info-row"><span class="il">Менеджер</span><span class="iv"><a href="tel:+77001234567">+7 700 123 45 67</a></span></div>
-              <div class="info-row"><span class="il">На карте</span><span class="iv"><a href="#" target="_blank">🔗 2GIS / Google Maps</a></span></div>
-              <div class="info-row"><span class="il">Режим работы</span><span class="iv">Пн–Сб, 9:00–18:00</span></div>
-              <div class="info-row"><span class="il">Instagram</span><span class="iv"><a href="#" target="_blank">@ruscargo_kz</a></span></div>
-              <div class="info-row"><span class="il">Email (публичный)</span><span class="iv"><a href="mailto:info@ruscargo.kz">info@ruscargo.kz</a></span></div>
-            </div>
-          </div>
-
-          <!-- 3. Склад -->
-          <div class="card">
-            <div class="info-section">
-              <div class="info-section-title"><span>🇨🇳</span> Склад в Китае</div>
-              <div class="info-row"><span class="il">Название</span><span class="iv">Guangzhou Cargo Hub</span></div>
-              <div class="info-row"><span class="il">Телефон</span><span class="iv"><a href="tel:+862012345678">+86 20 1234 5678</a></span></div>
-              <div class="info-row"><span class="il">Адрес склада</span><span class="iv" style="font-size:12px;color:var(--text-muted);text-align:right;">广州市白云区白云大道123号</span></div>
-            </div>
-          </div>
-
-        </div><!-- /left -->
-
-        <!-- RIGHT: tabs (stats + settings info) -->
-        <div>
-
-          <!-- Tabs -->
-          <div class="detail-tabs">
-            <div class="detail-tab active" onclick="switchDetailTab(0,this)">📊 Аналитика</div>
-            <div class="detail-tab" onclick="switchDetailTab(1,this)">🔢 Коды клиентов</div>
-            <div class="detail-tab" onclick="switchDetailTab(2,this)">💰 Тарифы</div>
-            <div class="detail-tab" onclick="switchDetailTab(3,this)">💳 Реквизиты</div>
-          </div>
-
-          <!-- Chart panel -->
-          <div class="detail-tab-panel active" id="dtab0">
-            <div class="card" style="margin-bottom:16px;">
-              <div class="card-header"><div class="card-title">Активность заказов (последние 6 месяцев)</div></div>
-              <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-              <div class="card">
-                <div class="card-header"><div class="card-title">Заказы по статусам</div></div>
-                <div class="chart-wrap" style="height:180px;"><canvas id="statusChart"></canvas></div>
-              </div>
-              <div class="card">
-                <div class="card-header"><div class="card-title">Клиенты с долгами</div></div>
-                <div class="chart-wrap" style="height:180px;"><canvas id="debtChart"></canvas></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Client codes panel -->
-          <div class="detail-tab-panel" id="dtab1">
-            <div class="card">
-              <div class="info-section">
-                <div class="info-section-title"><span>🔢</span> Настройки кодов клиентов</div>
-                <div class="info-row">
-                  <span class="il">Префикс</span>
-                  <span class="iv"><span class="code-chip">RC</span></span>
-                </div>
-                <div class="info-row">
-                  <span class="il">Стартовый номер</span>
-                  <span class="iv mono">0001</span>
-                </div>
-              </div>
-              <div class="info-section" style="margin-top:16px;">
-                <div class="info-section-title">Примеры кодов</div>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                  <div style="text-align:center;background:var(--bg-elevated);border-radius:12px;padding:14px 20px;">
-                    <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Пример кода</div>
-                    <div class="code-chip">RC-0042</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Pricing panel -->
-          <div class="detail-tab-panel" id="dtab2">
-            <div class="card">
-              <div class="info-section">
-                <div class="info-section-title"><span>⚖️</span> Цены</div>
-                <div class="info-row">
-                  <span class="il">Цена за кг (по умолч.)</span>
-                  <span class="iv" style="color:#34D399;font-size:18px;font-weight:800;">450 с</span>
-                </div>
-                <div class="info-row">
-                  <span class="il">Бесплатных дней хранения</span>
-                  <span class="iv">14 дней</span>
-                </div>
-              </div>
-              <div class="info-section" style="margin-top:16px;">
-                <div class="info-section-title"><span>📆</span> Штрафы</div>
-                <div class="info-row">
-                  <span class="il">Штраф за хранение</span>
-                  <span class="iv" style="color:#F87171;font-weight:700;">50 с / день</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Requisites panel -->
-          <div class="detail-tab-panel" id="dtab3">
-            <div class="card">
-              <div class="info-section">
-                <div class="info-section-title"><span>🏦</span> Реквизиты</div>
-                <div class="info-row"><span class="il">Банк</span><span class="iv">Mbank (Оптима Банк)</span></div>
-                <div class="info-row"><span class="il">Владелец счёта</span><span class="iv">Асанов Нурбек Асанович</span></div>
-                <div class="info-row">
-                  <span class="il">Номер телефона / счета</span>
-                  <span class="iv">
-                    <span class="mono" style="font-size:16px;letter-spacing:.05em;">+996 700 123 456</span>
-                    <button class="btn btn-ghost btn-sm" style="margin-left:8px;padding:2px 8px;" onclick="navigator.clipboard.writeText('+996700123456');Toast.success('Скопировано!')">📋</button>
-                  </span>
-                </div>
-              </div>
-              <div class="info-section" style="margin-top:16px;">
-                <div class="info-section-title"><span>📱</span> QR-коды</div>
-                <div class="qr-grid">
-                  <div class="qr-box">
-                    <div style="font-size:40px;margin-bottom:8px;">🏦</div>
-                    <div class="qr-box-lbl">QR для оплаты (банк)</div>
-                    <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="Toast.info('QR','QR не загружен')">Нет QR</button>
-                  </div>
-                  <div class="qr-box">
-                    <div style="font-size:40px;margin-bottom:8px;">🤖</div>
-                    <div class="qr-box-lbl">QR Telegram-бота</div>
-                    <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="Toast.info('QR','QR не загружен')">Нет QR</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div><!-- /right -->
-      </div><!-- /layout -->
-
-    </div>
-  </div>
-</div>
-
-<div class="toast-container"></div>
-<script src="../assets/js/app.js"></script>
 <script>
 function switchDetailTab(idx, btn) {
   document.querySelectorAll('.detail-tab').forEach((t,i) => t.classList.toggle('active', i === idx));
@@ -369,5 +149,4 @@ document.addEventListener('DOMContentLoaded', () => {
   ]);
 });
 </script>
-</body>
-</html>
+{% endblock %}
