@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заявки на выкуп — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="bg-mesh">
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb"><a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a><span style="color:var(--text-muted);">/</span><a href="index.html" style="color:var(--text-muted);text-decoration:none;">Каталог</a><span style="color:var(--text-muted);">/</span><span>Заявки</span></div>
+  </div>
+  <div class="topbar-right"><button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button></div>
+</header>
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+      <div class="page-header animate-fade-up">
+        <div><h1>Заявки на выкуп</h1><p>Новых заявок: <strong id="newCount">5</strong></p></div>
+        <div class="page-header-actions"><button class="btn btn-secondary btn-sm">📥 Экспорт</button></div>
+      </div>
+
+      <!-- Status Tabs -->
+      <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;" class="animate-fade-up delay-100">
+        <button class="btn btn-primary btn-sm" onclick="filterReqs('all',this)">Все (8)</button>
+        <button class="btn btn-ghost btn-sm" onclick="filterReqs('new',this)">🆕 Новые (5)</button>
+        <button class="btn btn-ghost btn-sm" onclick="filterReqs('inwork',this)">🔄 В работе (2)</button>
+        <button class="btn btn-ghost btn-sm" onclick="filterReqs('done',this)">✅ Выполнены (1)</button>
+        <button class="btn btn-ghost btn-sm" onclick="filterReqs('cancelled',this)">✕ Отменены (0)</button>
+      </div>
+
+      <div class="card animate-fade-up delay-200" style="padding:0;">
+        <div class="table-container" style="border:none;">
+          <table>
+            <thead><tr><th>Клиент</th><th>Товар</th><th>Ссылка</th><th>Размер / Цвет</th><th>Кол-во</th><th>Бюджет</th><th>Статус</th><th>Дата</th><th>Действия</th></tr></thead>
+            <tbody id="requestsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Request Detail Modal -->
+<div class="modal-overlay" id="reqDetailModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Детали заявки</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body" id="reqDetailBody">—</div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Закрыть</button>
+      <button class="btn btn-warning btn-sm" onclick="setReqStatus('inwork')">🔄 В работу</button>
+      <button class="btn btn-success" onclick="setReqStatus('done')">✅ Выполнено</button>
+      <button class="btn btn-danger btn-sm" onclick="setReqStatus('cancelled')">✕ Отменить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+const statusLabels = { new:{label:'Новая',color:'info'}, inwork:{label:'В работе',color:'warning'}, done:{label:'Выполнена',color:'success'}, cancelled:{label:'Отменена',color:'neutral'} };
+let requests = JSON.parse(JSON.stringify(ZeaData.purchaseRequests));
+let filterStatus = 'all';
+let activeReqId = null;
+
+function renderTable(data) {
+  document.getElementById('newCount').textContent = data.filter(r => r.status === 'new').length;
+  const tbody = document.getElementById('requestsTable');
+  if (!data.length) { tbody.innerHTML = `<tr><td colspan="9"><div class="table-empty"><span class="table-empty-icon">📋</span>Заявок не найдено</div></td></tr>`; return; }
+  tbody.innerHTML = data.map(r => {
+    const s = statusLabels[r.status] || {label:r.status,color:'neutral'};
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar avatar-sm" style="background:${ZeaUtils.getAvatarColor(r.client)};font-size:10px;">${ZeaUtils.getInitials(r.client)}</div><span style="font-size:13px;font-weight:600;">${r.client}</span></div></td>
+      <td style="font-size:13px;font-weight:600;">${r.product}</td>
+      <td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><a href="${r.link}" target="_blank" style="color:var(--primary-light);font-size:12px;">🔗 Ссылка</a></td>
+      <td style="font-size:12px;color:var(--text-muted);">${r.size || '—'} · ${r.color || '—'}</td>
+      <td style="font-size:13px;font-weight:600;text-align:center;">${r.qty}</td>
+      <td style="font-size:13px;font-weight:700;color:var(--primary-light);">${r.budget ? r.budget.toLocaleString() + ' с' : '—'}</td>
+      <td><span class="badge badge-${s.color}">${s.label}</span></td>
+      <td style="font-size:12px;color:var(--text-muted);">${ZeaUtils.formatDate(r.date)}</td>
+      <td>
+        <div class="table-actions">
+          <button class="btn btn-ghost btn-icon-sm" onclick="openReq(${r.id})" title="Детали">👁</button>
+          ${r.status==='new' ? `<button class="btn btn-primary btn-sm" onclick="quickAction(${r.id},'inwork')">→ В работу</button>` : ''}
+          ${r.status==='inwork' ? `<button class="btn btn-success btn-sm" onclick="quickAction(${r.id},'done')">✓ Готово</button>` : ''}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterReqs(status, btn) {
+  filterStatus = status;
+  document.querySelectorAll('[onclick^="filterReqs"]').forEach(b => { b.className = 'btn btn-ghost btn-sm'; });
+  btn.className = 'btn btn-primary btn-sm';
+  const filtered = status === 'all' ? requests : requests.filter(r => r.status === status);
+  renderTable(filtered);
+}
+
+function openReq(id) {
+  activeReqId = id;
+  const r = requests.find(x => x.id === id);
+  document.getElementById('reqDetailBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div><div style="font-size:12px;color:var(--text-muted);">Клиент</div><div style="font-size:15px;font-weight:700;">${r.client}</div></div>
+      <div><div style="font-size:12px;color:var(--text-muted);">Статус</div><span class="badge badge-${statusLabels[r.status]?.color}">${statusLabels[r.status]?.label}</span></div>
+      <div><div style="font-size:12px;color:var(--text-muted);">Товар</div><div style="font-size:14px;font-weight:600;">${r.product}</div></div>
+      <div><div style="font-size:12px;color:var(--text-muted);">Кол-во</div><div style="font-size:14px;font-weight:600;">${r.qty} шт.</div></div>
+      <div><div style="font-size:12px;color:var(--text-muted);">Размер</div><div style="font-size:14px;">${r.size || '—'}</div></div>
+      <div><div style="font-size:12px;color:var(--text-muted);">Цвет</div><div style="font-size:14px;">${r.color || '—'}</div></div>
+      <div><div style="font-size:12px;color:var(--text-muted);">Бюджет</div><div style="font-size:16px;font-weight:800;color:var(--primary-light);">${r.budget ? r.budget.toLocaleString() + ' с' : 'Не указан'}</div></div>
+      <div><div style="font-size:12px;color:var(--text-muted);">Дата</div><div style="font-size:14px;">${ZeaUtils.formatDate(r.date)}</div></div>
+    </div>
+    <div><div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Ссылка на товар</div>
+    <a href="${r.link}" target="_blank" style="color:var(--primary-light);word-break:break-all;">${r.link}</a></div>
+    ${r.comment ? `<div style="margin-top:14px;padding:12px;background:var(--bg-elevated);border-radius:var(--radius-lg);font-size:13px;color:var(--text-secondary);">${r.comment}</div>` : ''}
+  `;
+  Modal.open('reqDetailModal');
+}
+
+function quickAction(id, status) {
+  const r = requests.find(x => x.id === id);
+  if (r) r.status = status;
+  const filtered = filterStatus === 'all' ? requests : requests.filter(r => r.status === filterStatus);
+  renderTable(filtered);
+  Toast.success('Статус обновлён', statusLabels[status].label);
+}
+
+function setReqStatus(status) {
+  if (activeReqId) {
+    const r = requests.find(x => x.id === activeReqId);
+    if (r) r.status = status;
+  }
+  Modal.close('reqDetailModal');
+  const filtered = filterStatus === 'all' ? requests : requests.filter(r => r.status === filterStatus);
+  renderTable(filtered);
+  Toast.success('Статус заявки обновлён', statusLabels[status]?.label);
+}
+
+renderTable(requests);
+</script>
+</body>
+</html>

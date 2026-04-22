@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добавить посылку — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .form-page-container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+    .form-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-xl); }
+    .form-page-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; color: var(--text-primary); }
+    .form-page-desc { color: var(--text-muted); font-size: 14px; margin-bottom: 32px; }
+    .section-box { background: rgba(0,0,0,0.2); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
+    .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 16px; }
+    .btn-create { background: #EAB308; color: #000; font-weight: 700; border: none; padding: 12px 32px; }
+    .btn-create:hover { background: #FACC15; }
+    .btn-outline { background: rgba(255,255,255,0.05); border: 1px solid var(--border-default); color: #fff; }
+    .calc-toggle { display: flex; gap: 8px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: var(--radius-md); width: fit-content; }
+    .calc-btn { border: none; padding: 8px 20px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; background: transparent; color: var(--text-muted); }
+    .calc-btn.active { background: #EAB308; color: #000; }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<div class="form-page-container">
+  <div class="form-card animate-fade-up">
+    <h1 class="form-page-title">Добавить посылку</h1>
+    <p class="form-page-desc">Клиент выбирается по <strong>коду клиента</strong> (вводите только номер, например: 1957).</p>
+
+    <div class="section-box">
+      <div class="section-title">КЛИЕНТ И ГРУППА</div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+        <div class="form-group">
+          <label class="form-label">Код клиента (только номер)</label>
+          <input type="text" class="form-control" placeholder="Например: 1957">
+          <div style="font-size:11px; color:var(--text-disabled); margin-top:4px;">Введите только номер (например: 1957) или полный код (например: Т1-1957)</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Группа</label>
+          <select class="form-control">
+            <option>group-188</option>
+            <option>group-189</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-box">
+      <div class="section-title">ТРЕК-НОМЕР</div>
+      <div class="form-group">
+        <label class="form-label">Трек-номер 1</label>
+        <input type="text" class="form-control" placeholder="Введите трек-номер первой посылки">
+      </div>
+      <div class="form-group" style="max-width:200px;">
+        <label class="form-label">Количество (шт.)</label>
+        <input type="number" class="form-control" value="1">
+        <div style="font-size:11px; color:var(--text-disabled); margin-top:4px;">Если несколько посылок с одинаковым трек-номером</div>
+      </div>
+      <button class="btn btn-outline btn-sm">+ Добавить трек-номер</button>
+    </div>
+
+    <div class="section-box">
+      <div class="section-title">РАСЧЁТ СТОИМОСТИ</div>
+      <div class="form-group">
+        <label class="form-label">Способ расчёта</label>
+        <div class="calc-toggle">
+          <button class="calc-btn active">По кг</button>
+          <button class="calc-btn">По габариту</button>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+        <div class="form-group">
+          <label class="form-label">Вес (кг)</label>
+          <input type="number" class="form-control" placeholder="0" step="0.1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Цена за кг</label>
+          <input type="number" class="form-control" placeholder="0">
+          <div style="font-size:11px; color:var(--text-disabled); margin-top:4px;">Автоматически из филиала клиента (если задана)</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:12px; margin-top:32px;">
+      <button class="btn btn-create" onclick="createOrder()">Создать</button>
+      <button class="btn btn-secondary" onclick="history.back()">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+function createOrder() {
+  Toast.success('Посылка добавлена в группу');
+  setTimeout(() => history.back(), 1000);
+}
+
+// Simple toggle logic
+document.querySelectorAll('.calc-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    this.parentElement.querySelectorAll('.calc-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

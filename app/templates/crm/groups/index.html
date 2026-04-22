@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Группы — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 28px; }
+    .import-area { background: var(--bg-elevated); border: 2px dashed var(--border-default); border-radius: var(--radius-lg); padding: 40px; text-align: center; cursor: pointer; transition: all .2s; }
+    .manifest-preview { max-height: 400px; overflow-y: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-top: 16px; }
+    .table-link { color: var(--primary-light); text-decoration: none; font-weight: 700; transition: color .2s; }
+    .table-link:hover { color: var(--primary); text-decoration: underline; }
+    .file-upload-area { background: rgba(108,99,255,0.04); border: 2px dashed var(--border-default); border-radius: var(--radius-lg); padding: 32px; text-align: center; cursor: pointer; transition: all .2s; }
+    .file-upload-area:hover { border-color: var(--primary); background: rgba(108,99,255,0.08); }
+    .file-upload-icon { font-size: 32px; margin-bottom: 8px; display: block; }
+    .file-upload-text { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .file-upload-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .manifest-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .manifest-table th { position: sticky; top: 0; background: var(--bg-card); z-index: 10; }
+    .manifest-table td, .manifest-table th { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border-subtle); }
+    .status-badge-group { display: flex; align-items: center; gap: 8px; }
+    .btn-create { background: #EAB308; color: #000; font-weight: 700; border: none; }
+    .btn-create:hover { background: #FACC15; transform: translateY(-1px); }
+    .btn-cancel { background: #1E293B; color: #fff; border: 1px solid #334155; }
+    .btn-cancel:hover { background: #334155; }
+    .form-hint { font-size: 11px; color: var(--text-disabled); margin-top: 4px; }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link active"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb">
+      <a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a>
+      <span style="color:var(--text-muted);">/</span><span>Группы</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="btn btn-primary btn-sm" data-modal-open="importModal">📥 Загрузить манифест</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+
+      <div class="page-header animate-fade-up">
+        <div>
+          <h1>Группы заказов</h1>
+          <p>Управление партиями товаров и массовое обновление статусов</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-primary" data-modal-open="importModal">+ Создать группу</button>
+        </div>
+      </div>
+
+      <div class="stats-grid animate-fade-up delay-100">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(108,99,255,0.1); color:var(--primary);">📁</div>
+          <div class="stat-content">
+            <div class="stat-value">24</div>
+            <div class="stat-label">Всего групп</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(16,185,129,0.1); color:var(--success);">📦</div>
+          <div class="stat-content">
+            <div class="stat-value">1,420</div>
+            <div class="stat-label">Заказов обработано</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card animate-fade-up delay-200" style="padding:0;">
+        <div class="table-container" style="border:none;">
+          <table>
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>ID Группы</th>
+                <th>Кол-во заказов</th>
+                <th>Статус партии</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="groupsTable">
+              <tr>
+                <td>22.04.2024</td>
+                <td style="font-family:monospace;"><a href="detail.html?id=1" class="table-link">BATCH-2024-04-22</a></td>
+                <td>42</td>
+                <td><span class="badge badge-warning">🚚 В пути</span></td>
+                <td>
+                  <div class="table-actions">
+                    <a href="detail.html?id=1" class="btn btn-ghost btn-icon-sm" title="Детали">👁</a>
+                    <button class="btn btn-ghost btn-icon-sm" title="Обновить статус">🔄</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>20.04.2024</td>
+                <td style="font-family:monospace;"><a href="detail.html?id=2" class="table-link">BATCH-2024-04-20</a></td>
+                <td>156</td>
+                <td><span class="badge badge-success">✅ В Кыргызстане</span></td>
+                <td>
+                  <div class="table-actions">
+                    <a href="detail.html?id=2" class="btn btn-ghost btn-icon-sm" title="Детали">👁</a>
+                    <button class="btn btn-ghost btn-icon-sm" title="Обновить статус">🔄</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT MODAL -->
+<div class="modal-overlay" id="importModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Создать новую группу</div>
+      <button class="modal-close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div class="form-group">
+          <label class="form-label">Дата отправки</label>
+          <input type="date" class="form-control" id="groupDate">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Номер группы</label>
+          <input type="text" class="form-control" value="BATCH-2024-04-22" readonly style="opacity:0.6;">
+          <div class="form-hint">Номер генерируется автоматически</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Филиал</label>
+        <select class="form-control" id="groupBranch">
+          <option value="">Выберите филиал</option>
+          <option value="bishkek">Бишкек</option>
+          <option value="almaty">Алматы</option>
+          <option value="tashkent">Ташкент</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Статус группы</label>
+        <select class="form-control" id="groupStatus">
+          <option value="in_transit" selected>В пути</option>
+          <option value="arrived">В Кыргызстане</option>
+          <option value="ready">Готов к выдаче</option>
+          <option value="issued">Выдано</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom:20px;">
+        <label class="form-label">Цена за кг</label>
+        <input type="number" class="form-control" id="groupPrice" placeholder="0.00" step="0.01">
+      </div>
+
+      <div class="form-section-title" style="margin-bottom:12px; font-size:14px;">📦 Содержимое (Манифест)</div>
+      <div class="file-upload-area" id="dropArea" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept=".xlsx, .xls" style="display:none;" onchange="handleFile(this)">
+        <span class="file-upload-icon">📊</span>
+        <div class="file-upload-text" id="fileStatus">Нажмите или перетащите Excel файл</div>
+        <div class="file-upload-hint">Форматы: .xlsx, .xls (до 10 МБ)</div>
+      </div>
+      
+      <div id="manifestPreviewArea" style="display:none;">
+        <div class="manifest-preview">
+          <table class="manifest-table">
+            <thead>
+              <tr>
+                <th>№</th>
+                <th>Трек-код</th>
+                <th>Код клиента</th>
+                <th>Статус</th>
+              </tr>
+            </thead>
+            <tbody id="previewBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="background:rgba(0,0,0,0.2);">
+      <button class="btn btn-cancel" data-modal-close>Отмена</button>
+      <div style="flex:1;"></div>
+      <button class="btn btn-primary" id="processBtn" onclick="processManifest()">Обработать манифест</button>
+      <button class="btn btn-create" id="confirmBtn" style="display:none;" onclick="confirmImport()">Создать</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+let parsedData = [];
+
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('fileStatus').innerHTML = `<span style="color:var(--primary-light);">📎 ${file.name}</span>`;
+  Toast.info('Файл выбран', file.name);
+}
+
+function processManifest() {
+  const file = document.getElementById('fileInput').files[0];
+  if (!file) { Toast.warning('Загрузите файл манифеста'); return; }
+  
+  // Simulation of parsing Excel
+  parsedData = [
+    { index: 1, track: 'CN2024110001', clientCode: 'A102', status: 'ok' },
+    { index: 2, track: 'CN2024110002', clientCode: 'B554', status: 'ok' },
+    { index: 3, track: 'CN2024110003', clientCode: 'C990', status: 'ok' },
+    { index: 4, track: 'CN2024110004', clientCode: 'A102', status: 'ok' },
+    { index: 5, track: 'CN2024110005', clientCode: 'X771', status: 'ok' },
+  ];
+
+  // Show preview
+  document.getElementById('dropArea').style.display = 'none';
+  document.getElementById('manifestPreviewArea').style.display = 'block';
+  document.getElementById('processBtn').style.display = 'none';
+  document.getElementById('confirmBtn').style.display = 'block';
+
+  const tbody = document.getElementById('previewBody');
+  tbody.innerHTML = parsedData.map(item => `
+    <tr>
+      <td>${item.index}</td>
+      <td style="font-family:monospace;">${item.track}</td>
+      <td><span class="badge badge-purple">${item.clientCode}</span></td>
+      <td><span style="color:var(--success);">✓ Готов</span></td>
+    </tr>
+  `).join('');
+  
+  Toast.success('Манифест обработан', `Найдено заказов: ${parsedData.length}`);
+}
+
+function confirmImport() {
+  Toast.success('Группа создана', `Партия BATCH-${new Date().toISOString().split('T')[0]} успешно добавлена`);
+  setTimeout(() => {
+    Modal.close('importModal');
+    // In a real app, we would refresh the list
+  }, 1000);
+}
+
+// Reset modal on close
+document.querySelectorAll('[data-modal-close]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        setTimeout(() => {
+            document.getElementById('dropArea').style.display = 'block';
+            document.getElementById('manifestPreviewArea').style.display = 'none';
+            document.getElementById('processBtn').style.display = 'block';
+            document.getElementById('confirmBtn').style.display = 'none';
+            document.getElementById('fileInput').value = '';
+            document.getElementById('fileStatus').textContent = 'Нажмите или перетащите Excel файл';
+        }, 300);
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Уведомления — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .notif-list { display:flex; flex-direction:column; gap:0; }
+    .notif-row { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border-bottom:1px solid var(--border-subtle); transition:background .15s; cursor:pointer; }
+    .notif-row:last-child { border-bottom:none; }
+    .notif-row:hover { background:var(--bg-hover); }
+    .notif-row.unread { background:rgba(108,99,255,0.04); }
+    .notif-dot { width:8px; height:8px; border-radius:50%; background:var(--primary); margin-top:5px; flex-shrink:0; }
+    .notif-dot.read { background:transparent; }
+    .notif-icon-box { width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+    .notif-content { flex:1; }
+    .notif-title { font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:3px; }
+    .notif-sub { font-size:12px; color:var(--text-muted); line-height:1.6; }
+    .notif-time { font-size:11px; color:var(--text-disabled); white-space:nowrap; }
+    .compose-form { display:flex; flex-direction:column; gap:16px; }
+    .template-chips { display:flex; flex-wrap:wrap; gap:8px; }
+    .template-chip { padding:6px 14px; border:1px solid var(--border-subtle); border-radius:99px; font-size:12px; color:var(--text-secondary); cursor:pointer; transition:all .15s; background:var(--bg-elevated); }
+    .template-chip:hover { border-color:var(--primary); color:var(--primary-light); background:rgba(108,99,255,0.06); }
+    .template-chip.active { border-color:var(--primary); color:var(--primary-light); background:rgba(108,99,255,0.12); }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link active"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb"><a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a><span style="color:var(--text-muted);">/</span><span>Уведомления</span></div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button>
+    <button class="btn btn-primary btn-sm" data-modal-open="composeModal">✉ Отправить</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+      <div class="page-header animate-fade-up">
+        <div><h1>Уведомления</h1><p>История и отправка сообщений клиентам</p></div>
+        <div class="page-header-actions">
+          <button class="btn btn-secondary btn-sm" onclick="markAllRead()">✓ Прочитать все</button>
+          <button class="btn btn-primary" data-modal-open="composeModal">✉ Отправить уведомление</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;" class="animate-fade-up delay-100">
+        <div class="stat-card" style="--stat-accent:#6C63FF;--stat-accent-bg:rgba(108,99,255,0.12);"><div class="stat-icon">📨</div><div class="stat-content"><div class="stat-value" data-counter="142">142</div><div class="stat-label">Отправлено сегодня</div></div></div>
+        <div class="stat-card" style="--stat-accent:#10B981;--stat-accent-bg:rgba(16,185,129,0.12);"><div class="stat-icon">✅</div><div class="stat-content"><div class="stat-value">98%</div><div class="stat-label">Доставлено</div></div></div>
+        <div class="stat-card" style="--stat-accent:#3B82F6;--stat-accent-bg:rgba(59,130,246,0.12);"><div class="stat-icon">📊</div><div class="stat-content"><div class="stat-value" data-counter="67">67%</div><div class="stat-label">Прочитано</div></div></div>
+        <div class="stat-card" style="--stat-accent:#F59E0B;--stat-accent-bg:rgba(245,158,11,0.12);"><div class="stat-icon">⚡</div><div class="stat-content"><div class="stat-value" data-counter="5">5</div><div class="stat-label">Авто-уведомлений</div></div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;" class="animate-fade-up delay-200">
+        <!-- Notification Feed -->
+        <div class="card" style="padding:0;">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-size:16px;font-weight:700;">Лента уведомлений</div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-ghost btn-sm active" onclick="filterNotifs('all',this)">Все</button>
+              <button class="btn btn-ghost btn-sm" onclick="filterNotifs('unread',this)">Непрочитанные</button>
+              <button class="btn btn-ghost btn-sm" onclick="filterNotifs('auto',this)">Авто</button>
+            </div>
+          </div>
+          <div class="notif-list" id="notifList"></div>
+        </div>
+
+        <!-- Compose Quick Panel -->
+        <div class="card" style="position:sticky;top:calc(var(--header-height)+24px);">
+          <div class="card-title" style="margin-bottom:16px;">⚡ Быстрая отправка</div>
+          <div class="form-group">
+            <label class="form-label">Шаблон</label>
+            <div class="template-chips" id="templateChips">
+              <div class="template-chip active" onclick="useTemplate('ready',this)">📦 Готов к выдаче</div>
+              <div class="template-chip" onclick="useTemplate('debt',this)">⚠️ Напоминание</div>
+              <div class="template-chip" onclick="useTemplate('arrived',this)">✈ Прибыл</div>
+              <div class="template-chip" onclick="useTemplate('custom',this)">✏ Свой текст</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Получатель</label>
+            <select class="form-control" id="quickRecipient">
+              <option value="all">Все клиенты</option>
+              <option>Нурбек Асанов</option>
+              <option>Айгуль Бекова</option>
+              <option>Дамир Садыков</option>
+              <option>Штрафы</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Сообщение</label>
+            <textarea class="form-control" id="quickMessage" rows="3">📦 Ваш заказ готов к выдаче! Приходите в рабочее время.</textarea>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Канал</label>
+            <div style="display:flex;gap:8px;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" checked> ✈ Telegram</label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox"> 📱 SMS</label>
+            </div>
+          </div>
+          <button class="btn btn-primary w-full" style="margin-top:16px;" onclick="sendQuick()">✉ Отправить</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- COMPOSE MODAL -->
+<div class="modal-overlay" id="composeModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Отправить уведомление</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Получатели</label>
+        <select class="form-control">
+          <option>Все клиенты (248)</option>
+          <option>Только должники (7)</option>
+          <option>Заказы готовы к выдаче</option>
+          <option>Конкретный клиент…</option>
+        </select></div>
+      <div class="form-group"><label class="form-label">Тема</label><input type="text" class="form-control" placeholder="Тема сообщения (для SMS)"></div>
+      <div class="form-group"><label class="form-label">Текст <span class="required">*</span></label>
+        <textarea class="form-control" rows="4" id="composeText" placeholder="Текст сообщения…">📦 Уважаемый клиент! Ваш заказ готов к выдаче. Приходите в офис в рабочее время (Пн-Сб 9:00-18:00).</textarea></div>
+      <div class="form-group" style="margin-bottom:0;"><label class="form-label">Каналы отправки</label>
+        <div style="display:flex;gap:16px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" checked> ✈ Telegram</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox"> 📱 SMS</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="sendBulk()">✉ Отправить всем</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+const notifData = [
+  { id:1, type:'payment', icon:'✅', bg:'var(--success-bg)', title:'Айгуль Бекова — оплата 400 с', sub:'Заказ CN2024110002 · Автоматически', time:'2 мин', read:false },
+  { id:2, type:'order', icon:'📦', bg:'var(--info-bg)', title:'Новый заказ CN2024110008', sub:'Бекзод Рахимов · Детские игрушки', time:'15 мин', read:false },
+  { id:3, type:'debt', icon:'⚠️', bg:'var(--warning-bg)', title:'Напоминание о долге: Санжар Токтоматов', sub:'Штраф: 12 300 с · Отправлено операторм', time:'1 ч', read:false },
+  { id:4, type:'status', icon:'🚚', bg:'rgba(139,92,246,0.15)', title:'Статус изменён: CN2024110005', sub:'В пути → Прибыл в страну · Авто', time:'2 ч', read:true },
+  { id:5, type:'request', icon:'🛍️', bg:'rgba(59,130,246,0.15)', title:'Новая заявка на выкуп', sub:'Нурбек Асанов · Кроссовки Adidas', time:'3 ч', read:true },
+  { id:6, type:'payment', icon:'✅', bg:'var(--success-bg)', title:'Дамир Садыков — оплата 2 000 с', sub:'Частичное погашение долга', time:'5 ч', read:true },
+  { id:7, type:'order', icon:'📦', bg:'var(--info-bg)', title:'Заказ CN2024110003 готов к выдаче', sub:'Дамир Садыков · Уведомление отправлено', time:'вчера', read:true },
+];
+let notifs = [...notifData];
+
+const templates = {
+  ready:'📦 Ваш заказ готов к выдаче! Приходите в рабочее время.',
+  debt:'⚠️ Уважаемый клиент, у вас есть задолженность. Просим погасить в ближайшее время.',
+  arrived:'✈️ Ваш заказ прибыл в страну. В ближайшее время будет готов к выдаче.',
+  custom:''
+};
+
+function renderNotifs(data) {
+  document.getElementById('notifList').innerHTML = data.map(n => `
+    <div class="notif-row ${n.read ? '' : 'unread'}" onclick="markRead(${n.id})">
+      <div class="notif-dot ${n.read ? 'read' : ''}"></div>
+      <div class="notif-icon-box" style="background:${n.bg};">${n.icon}</div>
+      <div class="notif-content">
+        <div class="notif-title">${n.title}</div>
+        <div class="notif-sub">${n.sub}</div>
+      </div>
+      <div class="notif-time">${n.time}</div>
+    </div>
+  `).join('');
+}
+
+function markRead(id) {
+  const n = notifs.find(x => x.id === id);
+  if (n) n.read = true;
+  renderNotifs(notifs);
+}
+
+function markAllRead() {
+  notifs.forEach(n => n.read = true);
+  renderNotifs(notifs);
+  Toast.success('Все прочитаны');
+}
+
+function filterNotifs(f, btn) {
+  document.querySelectorAll('[onclick^="filterNotifs"]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (f === 'all') renderNotifs(notifs);
+  else if (f === 'unread') renderNotifs(notifs.filter(n => !n.read));
+  else renderNotifs(notifs.filter(n => ['status','order'].includes(n.type)));
+}
+
+function useTemplate(key, el) {
+  document.querySelectorAll('.template-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('quickMessage').value = templates[key] || '';
+}
+
+function sendQuick() {
+  const msg = document.getElementById('quickMessage').value.trim();
+  if (!msg) { Toast.warning('Введите текст сообщения'); return; }
+  const rec = document.getElementById('quickRecipient').value;
+  Toast.success('Уведомление отправлено!', rec);
+}
+
+function sendBulk() {
+  const msg = document.getElementById('composeText').value.trim();
+  if (!msg) { Toast.warning('Введите текст'); return; }
+  Modal.close('composeModal');
+  Toast.success('Рассылка отправлена!', '248 получателям · Telegram');
+}
+
+renderNotifs(notifs);
+</script>
+</body>
+</html>

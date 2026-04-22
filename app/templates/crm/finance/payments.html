@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оплаты — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="bg-mesh">
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link active"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb"><a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a><span style="color:var(--text-muted);">/</span><a href="index.html" style="color:var(--text-muted);text-decoration:none;">Финансы</a><span style="color:var(--text-muted);">/</span><span>Оплаты</span></div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button>
+    <button class="btn btn-secondary btn-sm">📥 Экспорт</button>
+    <button class="btn btn-primary btn-sm" data-modal-open="addPayModal">+ Принять оплату</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+      <div class="page-header animate-fade-up">
+        <div><h1>История оплат</h1><p>Все зарегистрированные платежи</p></div>
+        <div class="page-header-actions">
+          <input type="date" class="form-control" style="width:160px;" id="dateFrom">
+          <input type="date" class="form-control" style="width:160px;" id="dateTo">
+          <button class="btn btn-secondary btn-sm">📥 Экспорт</button>
+          <button class="btn btn-primary" data-modal-open="addPayModal">+ Принять оплату</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;" class="animate-fade-up delay-100">
+        <div class="stat-card" style="--stat-accent:#10B981;--stat-accent-bg:rgba(16,185,129,0.12);"><div class="stat-icon">💰</div><div class="stat-content"><div class="stat-value">5 500 с</div><div class="stat-label">Итого за период</div></div></div>
+        <div class="stat-card" style="--stat-accent:#6C63FF;--stat-accent-bg:rgba(108,99,255,0.12);"><div class="stat-icon">🔢</div><div class="stat-content"><div class="stat-value">4</div><div class="stat-label">Платежей</div></div></div>
+        <div class="stat-card" style="--stat-accent:#F59E0B;--stat-accent-bg:rgba(245,158,11,0.12);"><div class="stat-icon">💵</div><div class="stat-content"><div class="stat-value">1 375 с</div><div class="stat-label">Средний платёж</div></div></div>
+        <div class="stat-card" style="--stat-accent:#3B82F6;--stat-accent-bg:rgba(59,130,246,0.12);"><div class="stat-icon">👤</div><div class="stat-content"><div class="stat-value">4</div><div class="stat-label">Клиентов</div></div></div>
+      </div>
+
+      <!-- Filter -->
+      <div class="filter-bar animate-fade-up delay-100">
+        <div class="search-bar" style="flex:1;min-width:200px;"><span class="search-icon">🔍</span><input type="text" class="form-control" id="searchInput" placeholder="Клиент, заказ…"></div>
+        <select class="form-control" style="width:160px;" id="methodFilter" onchange="applyFilter()">
+          <option value="">Все способы</option>
+          <option value="cash">Наличные</option>
+          <option value="card">Карта</option>
+          <option value="transfer">Перевод</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="clearFilter()">✕</button>
+      </div>
+
+      <!-- Table -->
+      <div class="card animate-fade-up delay-200" style="padding:0;">
+        <div class="table-container" style="border:none;">
+          <table>
+            <thead><tr><th>Дата</th><th>Клиент</th><th>Заказ</th><th>Сумма</th><th>Способ</th><th>Оператор</th><th>Комментарий</th></tr></thead>
+            <tbody id="paymentsTable"></tbody>
+            <tfoot id="tableFooter"></tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PAYMENT MODAL -->
+<div class="modal-overlay" id="addPayModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Принять оплату</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Клиент <span class="required">*</span></label>
+        <select class="form-control"><option value="">— Выбрать —</option><option>Нурбек Асанов</option><option>Дамир Садыков</option><option>Мадина Карибаева</option><option>Санжар Токтоматов</option></select></div>
+      <div class="form-group"><label class="form-label">Заказ</label>
+        <input type="text" class="form-control" placeholder="CN2024110001" style="font-family:monospace;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="form-group"><label class="form-label">Сумма <span class="required">*</span></label><input type="number" class="form-control" id="newPayAmt" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">Способ</label>
+          <select class="form-control"><option>Наличные</option><option>Карта</option><option>Перевод</option></select></div>
+      </div>
+      <div class="form-group" style="margin-bottom:0;"><label class="form-label">Комментарий</label><input type="text" class="form-control" placeholder="Заметка"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-success" onclick="addPayment()">Принять ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+let payments = [...ZeaData.payments];
+let filtered = [...payments];
+
+const methodMap = { cash:'Наличные', card:'Карта', transfer:'Перевод' };
+
+function renderTable(data) {
+  const total = data.reduce((s,p) => s + p.amount, 0);
+  document.getElementById('paymentsTable').innerHTML = data.map(p => `
+    <tr>
+      <td style="font-size:12px;color:var(--text-muted);">${ZeaUtils.formatDate(p.date)}</td>
+      <td><div style="display:flex;align-items:center;gap:8px;">
+        <div class="avatar avatar-sm" style="background:${ZeaUtils.getAvatarColor(p.client)};font-size:10px;">${ZeaUtils.getInitials(p.client)}</div>
+        <span style="font-size:13px;font-weight:600;">${p.client}</span>
+      </div></td>
+      <td style="font-family:monospace;font-size:12px;color:var(--text-muted);">${p.order}</td>
+      <td style="font-size:15px;font-weight:800;color:var(--success-light);">+${p.amount.toLocaleString()} с</td>
+      <td><span class="badge badge-neutral">${methodMap[p.method] || p.method}</span></td>
+      <td style="font-size:12px;color:var(--text-muted);">${p.operator}</td>
+      <td style="font-size:12px;color:var(--text-muted);">—</td>
+    </tr>
+  `).join('');
+  document.getElementById('tableFooter').innerHTML = `
+    <tr style="background:var(--bg-elevated);">
+      <td colspan="3" style="padding:12px 16px;font-weight:700;color:var(--text-secondary);">Итого за период</td>
+      <td style="padding:12px 16px;font-size:16px;font-weight:800;color:var(--success-light);">+${total.toLocaleString()} с</td>
+      <td colspan="3"></td>
+    </tr>
+  `;
+}
+
+function applyFilter() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const method = document.getElementById('methodFilter').value;
+  filtered = payments.filter(p => {
+    if (q && !`${p.client} ${p.order}`.toLowerCase().includes(q)) return false;
+    if (method && p.method !== method) return false;
+    return true;
+  });
+  renderTable(filtered);
+}
+
+function clearFilter() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('methodFilter').value = '';
+  applyFilter();
+}
+
+function addPayment() {
+  const amt = parseInt(document.getElementById('newPayAmt').value);
+  if (!amt) { Toast.warning('Введите сумму'); return; }
+  Modal.close('addPayModal');
+  Toast.success(`Оплата ${amt.toLocaleString()} с принята!`);
+}
+
+document.getElementById('searchInput').addEventListener('input', ZeaUtils.debounce(applyFilter, 250));
+
+// Default dates
+const now = new Date();
+document.getElementById('dateTo').value = now.toISOString().split('T')[0];
+const from = new Date(now); from.setDate(from.getDate() - 30);
+document.getElementById('dateFrom').value = from.toISOString().split('T')[0];
+
+renderTable(payments);
+</script>
+</body>
+</html>

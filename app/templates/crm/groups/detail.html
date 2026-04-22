@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Детали группы — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .detail-header { display: flex; align-items: center; gap: 24px; margin-bottom: 32px; flex-wrap: wrap; }
+    .batch-id { font-family: monospace; font-size: 32px; font-weight: 900; color: var(--primary-light); letter-spacing: -0.02em; }
+    .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 32px; }
+    .meta-item { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 16px; }
+    .meta-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .meta-value { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link active"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb">
+      <a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a>
+      <span style="color:var(--text-muted);">/</span>
+      <a href="index.html" style="color:var(--text-muted);text-decoration:none;">Группы</a>
+      <span style="color:var(--text-muted);">/</span>
+      <span>BATCH-2024-04-22</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+
+      <div style="margin-bottom:16px;">
+        <a href="index.html" class="btn btn-ghost btn-sm">← Назад к списку</a>
+      </div>
+
+      <div class="detail-header animate-fade-up">
+        <div class="batch-id">BATCH-2024-04-22</div>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <span class="badge badge-warning" id="mainStatus" style="font-size:14px; padding:8px 16px;">🚚 В пути</span>
+          <div class="button-group" style="display:flex; gap:8px;">
+            <a href="sorting.html" class="btn btn-secondary btn-sm">Сортировка</a>
+            <a href="add-order.html" class="btn btn-secondary btn-sm">Добавить посылку</a>
+            <button class="btn btn-secondary btn-sm" onclick="deleteGroup()">Удалить группу</button>
+            <button class="btn btn-create btn-sm" id="arrivedBtn" onclick="setArrived()">В Кыргызстане</button>
+            <a href="index.html" class="btn btn-secondary btn-sm">Назад</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="meta-grid animate-fade-up delay-100" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="meta-item">
+          <div class="meta-label">Дата отправки</div>
+          <div class="meta-value">22.04.2024</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Филиал</div>
+          <div class="meta-value">Бишкек</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Цена за кг</div>
+          <div class="meta-value">800 сом</div>
+        </div>
+      </div>
+
+      <div class="meta-grid animate-fade-up delay-150" style="margin-top:-12px; margin-bottom:20px;">
+        <div class="meta-item" style="border-left: 4px solid var(--primary);">
+          <div class="meta-label">Общая стоимость</div>
+          <div class="meta-value">33 600 сом</div>
+        </div>
+        <div class="meta-item" style="border-left: 4px solid var(--success);">
+          <div class="meta-label">Оплачено</div>
+          <div class="meta-value" style="color:var(--success-light);">21 000 сом</div>
+        </div>
+        <div class="meta-item" style="border-left: 4px solid var(--danger);">
+          <div class="meta-label">Не оплачено</div>
+          <div class="meta-value" style="color:var(--danger-light);">12 600 сом</div>
+        </div>
+      </div>
+
+      <div class="meta-grid animate-fade-up delay-200" style="margin-top:-12px; margin-bottom:32px;">
+        <div class="meta-item" style="border-left: 4px solid #6366F1;">
+          <div class="meta-label">Всего заказов</div>
+          <div class="meta-value">42 шт</div>
+        </div>
+        <div class="meta-item" style="border-left: 4px solid #10B981;">
+          <div class="meta-label">Отсортировано</div>
+          <div class="meta-value" style="color:#34D399;">12 шт</div>
+        </div>
+        <div class="meta-item" style="border-left: 4px solid #F59E0B;">
+          <div class="meta-label">Осталось отсортировать</div>
+          <div class="meta-value" style="color:#FBBF24;">30 шт</div>
+        </div>
+      </div>
+
+      <div class="card animate-fade-up delay-200" style="padding:0;">
+        <div class="card-header" style="padding:20px;">
+          <div class="card-title">📦 Состав группы</div>
+        </div>
+        <div class="table-container" style="border:none;">
+          <table>
+            <thead>
+              <tr>
+                <th>ТРЕК</th>
+                <th>КЛИЕНТ</th>
+                <th>СТОИМОСТЬ</th>
+                <th>СТАТУС</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-family:monospace; font-weight:700; font-size:15px;">CN2024110001</td>
+                <td>
+                  <div style="font-weight:700; font-size:14px; color:#fff;">A102</div>
+                  <div style="font-size:12px; color:var(--text-muted);">Нурбек Асанов</div>
+                </td>
+                <td style="color:var(--text-muted);">—</td>
+                <td><span style="font-size:13px; color:#fff;">В пути</span></td>
+                <td style="text-align:right;"><a href="../orders/detail.html?id=1" class="btn btn-secondary btn-sm" style="border-radius:8px; font-weight:700;">Открыть</a></td>
+              </tr>
+              <tr>
+                <td style="font-family:monospace; font-weight:700; font-size:15px;">CN2024110002</td>
+                <td>
+                  <div style="font-weight:700; font-size:14px; color:#fff;">B554</div>
+                  <div style="font-size:12px; color:var(--text-muted);">Айбек Султанов</div>
+                </td>
+                <td style="color:var(--text-muted);">—</td>
+                <td><span style="font-size:13px; color:#fff;">В пути</span></td>
+                <td style="text-align:right;"><a href="../orders/detail.html?id=2" class="btn btn-secondary btn-sm" style="border-radius:8px; font-weight:700;">Открыть</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- STATUS MODAL -->
+<div class="modal-overlay" id="statusModal">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Массовое обновление статуса</div>
+      <button class="modal-close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
+        Выберите новый статус для всех <strong>42 заказов</strong> в этой группе.
+      </p>
+      <div class="form-group">
+        <label class="form-label">Новый статус</label>
+        <select class="form-control" id="newStatus">
+          <option value="in_transit">В пути</option>
+          <option value="arrived">В Кыргызстане</option>
+          <option value="ready">Готов к выдаче</option>
+          <option value="issued">Выдано</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="updateGroupStatus()">Применить ко всем</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+function updateGroupStatus() {
+    const s = document.getElementById('newStatus').value;
+    const labels = { in_transit: 'В пути', arrived: 'В Кыргызстане', ready: 'Готов к выдаче', issued: 'Выдано' };
+    Modal.close('statusModal');
+    Toast.success('Статус группы обновлен', labels[s]);
+}
+
+function setArrived() {
+    Toast.success('Статус обновлен', 'Все заказы: В Кыргызстане');
+    document.getElementById('arrivedBtn').style.display = 'none';
+    const statusBadge = document.getElementById('mainStatus');
+    if (statusBadge) {
+        statusBadge.className = 'badge badge-success';
+        statusBadge.textContent = '🇰🇬 В Кыргызстане';
+    }
+}
+
+function deleteGroup() {
+    if(confirm('Вы уверены, что хотите удалить группу?')) {
+        Toast.success('Группа удалена');
+        setTimeout(() => window.location.href = 'index.html', 1000);
+    }
+}
+</script>
+</body>
+</html>

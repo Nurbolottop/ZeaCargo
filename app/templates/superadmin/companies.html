@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Компании — ZeaCargo Суперадмин</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <style>
+    /* Wide modal for company form */
+    .modal-wide { max-width: 760px; }
+    .modal-xl   { max-width: 900px; }
+
+    /* Tabbed form inside modal */
+    .form-tabs { display: flex; gap: 4px; padding: 16px 24px 0; background: var(--bg-elevated); border-bottom: 1px solid var(--border-subtle); overflow-x: auto; flex-shrink: 0; }
+    .form-tab  { padding: 10px 16px; font-size: 13px; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid transparent; cursor: pointer; transition: all .2s; white-space: nowrap; }
+    .form-tab:hover  { color: var(--text-primary); }
+    .form-tab.active { color: var(--primary-light); border-bottom-color: var(--primary); }
+
+    .form-tab-panel { display: none; }
+    .form-tab-panel.active { display: block; }
+
+    /* Form section headers inside modal */
+    .form-section-h { font-size: 11px; font-weight: 700; color: var(--text-disabled); text-transform: uppercase; letter-spacing: .1em; margin: 20px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); }
+    .form-section-h:first-child { margin-top: 0; }
+
+    /* 2-col grid for fields */
+    .fg2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .fg3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    /* Photo upload */
+    .photo-uploader { border: 2px dashed var(--border-default); border-radius: var(--radius-lg); padding: 24px; text-align: center; cursor: pointer; transition: all .2s; position: relative; overflow: hidden; background: var(--bg-input); }
+    .photo-uploader:hover { border-color: var(--primary); background: rgba(108,99,255,.04); }
+    .photo-uploader input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .photo-uploader-icon { font-size: 32px; margin-bottom: 8px; }
+    .photo-uploader-label { font-size: 13px; color: var(--text-muted); }
+    .photo-uploader-sub   { font-size: 11px; color: var(--text-disabled); margin-top: 4px; }
+    .photo-preview { width: 100%; height: 120px; object-fit: contain; border-radius: var(--radius-md); display: none; }
+
+    /* readonly field highlight */
+    .form-control[readonly] { background: var(--bg-elevated); opacity: .7; cursor: default; }
+
+    /* tab indicator dots in tab labels */
+    .tab-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); margin-left: 6px; vertical-align: middle; }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <a href="../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">👑</div>
+    <div class="sidebar-logo-text">
+      <div class="sidebar-logo-title">ZeaCargo</div>
+      <div class="sidebar-logo-sub">Суперадмин</div>
+    </div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section"><div class="sidebar-section-label">Платформа</div>
+      <a href="dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="companies.html" class="sidebar-link active"><span class="sidebar-link-icon">🏢</span><span class="sidebar-link-text">Карго</span><span class="sidebar-link-badge">4</span></a>
+    </div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Управление</div>
+      <a href="settings.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+    </div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Также</div>
+      <a href="../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="settings.html" class="sidebar-user">
+      <div class="sidebar-user-avatar" style="background:linear-gradient(135deg,#F59E0B,#D97706);">СА</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Суперадмин</div><div class="sidebar-user-role">Платформа ZeaCargo</div></div>
+    </a>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb"><span style="color:var(--text-muted);">Суперадмин</span><span style="color:var(--text-muted);">/</span><span>Карго</span></div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔</button>
+    <a href="settings.html" class="btn btn-primary btn-sm">⚙️ Настройки</a>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+
+      <div class="page-header animate-fade-up">
+        <div>
+          <h1>Карго</h1>
+          <p>Всего карго на платформе: <strong id="totalCount">4</strong></p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-secondary btn-sm">📥 Экспорт</button>
+          <button class="btn btn-primary" onclick="openCompanyModal()">+ Добавить карго</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar animate-fade-up delay-100">
+        <div class="search-bar" style="flex:1;min-width:200px;">
+          <span class="search-icon">🔍</span>
+          <input class="form-control" id="searchInput" placeholder="Название, код, город…">
+        </div>
+        <select class="form-control" style="width:160px;" id="statusFilter" onchange="applyFilter()">
+          <option value="">Все статусы</option>
+          <option value="active">Активные</option>
+          <option value="paused">Пауза</option>
+        </select>
+        <select class="form-control" style="width:160px;" id="tariffFilter" onchange="applyFilter()">
+          <option value="">Все тарифы</option>
+          <option value="Старт">Старт</option>
+          <option value="Бизнес">Бизнес</option>
+          <option value="Корпорат">Корпорат</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="clearFilter()">✕ Сбросить</button>
+      </div>
+
+      <!-- Table -->
+      <div class="card animate-fade-up delay-200" style="padding:0;">
+        <div class="table-container" style="border:none;">
+          <table>
+            <thead>
+              <tr>
+                <th>Карго</th>
+                <th>Код</th>
+                <th>Город / Филиал</th>
+                <th>Тариф</th>
+                <th>Клиентов</th>
+                <th>Заказов</th>
+                <th>Статус</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="companiesTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     ADD / EDIT COMPANY MODAL (wide, tabbed)
+     ============================================= -->
+<div class="modal-overlay" id="companyModal">
+  <div class="modal modal-xl" style="padding:0; display:flex; flex-direction:column; max-height:90vh;">
+
+    <!-- Modal Header -->
+    <div class="modal-header" style="padding:20px 24px; flex-shrink:0;">
+      <div class="modal-title" id="modalTitle">Добавить карго-компанию</div>
+      <button class="modal-close" data-modal-close>✕</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="form-tabs" id="formTabs">
+      <div class="form-tab active" onclick="switchFormTab(0,this)">🏢 Основное</div>
+      <div class="form-tab" onclick="switchFormTab(1,this)">📍 Контакты</div>
+      <div class="form-tab" onclick="switchFormTab(2,this)">📦 Склад в Китае</div>
+      <div class="form-tab" onclick="switchFormTab(3,this)">🔢 Коды клиентов</div>
+      <div class="form-tab" onclick="switchFormTab(4,this)">💰 Цены и штрафы</div>
+      <div class="form-tab" onclick="switchFormTab(5,this)">💳 Реквизиты</div>
+    </div>
+
+    <!-- Tab Panels -->
+    <div class="modal-body" style="overflow-y:auto; flex:1;">
+
+      <!-- TAB 0: Основное -->
+      <div class="form-tab-panel active" id="ftab0">
+        <div class="form-section-h">Основная информация</div>
+        <div class="fg2">
+          <div class="form-group">
+            <label class="form-label">Название компании <span class="required">*</span></label>
+            <input class="form-control" id="cName" placeholder="RusCargo Bishkek">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Короткий код <span class="required">*</span></label>
+            <input class="form-control" id="cCode" placeholder="RC-005" style="font-family:monospace; text-transform:uppercase;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Город</label>
+            <input class="form-control" id="cCity" placeholder="Бишкек">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Филиал</label>
+            <input class="form-control" id="cBranch" placeholder="Главный офис / Ош / Tokmok">
+          </div>
+        </div>
+        <div class="form-section-h">Аккаунт администратора</div>
+        <div class="fg2">
+          <div class="form-group">
+            <label class="form-label">Email администратора <span class="required">*</span></label>
+            <input type="email" class="form-control" id="cEmail" placeholder="admin@company.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Временный пароль <span class="required">*</span></label>
+            <div style="display:flex;gap:8px;">
+              <input class="form-control" id="cPass" value="Cargo2025!" type="text" style="font-family:monospace;">
+              <button class="btn btn-ghost btn-sm" type="button" onclick="genPass()" title="Сгенерировать">🔄</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-section-h">Тариф подписки</div>
+        <div class="fg3">
+          <div class="form-group">
+            <label class="form-label">Тарифный план</label>
+            <select class="form-control" id="cTariff">
+              <option>Старт</option>
+              <option selected>Бизнес</option>
+              <option>Корпорат</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Дата активации</label>
+            <input type="date" class="form-control" id="cSince">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Оплачен до</label>
+            <input type="date" class="form-control" id="cPaidUntil">
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 1: Контакты -->
+      <div class="form-tab-panel" id="ftab1">
+        <div class="form-section-h">Основные контакты</div>
+        <div class="fg2">
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Адрес офиса</label>
+            <input class="form-control" id="cAddress" placeholder="г. Бишкек, ул. Манаса 123, оф. 5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Контакт менеджера (тел.)</label>
+            <input class="form-control" id="cManagerPhone" placeholder="+996 700 000 000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ссылка на карту</label>
+            <input class="form-control" id="cMapLink" placeholder="https://2gis.kg/bishkek/…">
+          </div>
+        </div>
+        <div class="form-section-h">Дополнительно</div>
+        <div class="fg2">
+          <div class="form-group">
+            <label class="form-label">Режим работы</label>
+            <input class="form-control" id="cWorktime" placeholder="Пн–Пт 9:00–18:00, Сб 10:00–15:00">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Instagram URL</label>
+            <input class="form-control" id="cInstagram" placeholder="https://instagram.com/ruscargo">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email (публичный)</label>
+            <input type="email" class="form-control" id="cPublicEmail" placeholder="info@ruscargo.kg">
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Склад в Китае -->
+      <div class="form-tab-panel" id="ftab2">
+        <div class="form-section-h">Данные склада в Китае</div>
+        <div class="form-group">
+          <label class="form-label">Название склада</label>
+          <input class="form-control" id="cWarehouseName" placeholder="Guangzhou International Cargo Warehouse">
+        </div>
+        <div class="fg2">
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Телефон склада</label>
+            <input class="form-control" id="cWarehousePhone" placeholder="+86 20 0000 0000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Адрес склада</label>
+          <textarea class="form-control" id="cWarehouseAddressCn" rows="3" placeholder="广州市白云区…"></textarea>
+        </div>
+      </div>
+
+      <!-- TAB 3: Коды клиентов -->
+      <div class="form-tab-panel" id="ftab3">
+        <div class="form-section-h">Настройка кодов клиентов</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">Коды клиентов формируются автоматически при создании. Например: <code style="background:var(--bg-elevated);padding:2px 8px;border-radius:6px;color:var(--primary-light);">RC-0042</code></p>
+        <div class="fg2">
+          <div class="form-group">
+            <label class="form-label">Префикс кода клиента</label>
+            <input class="form-control" id="cCodePrefix" placeholder="RC" style="text-transform:uppercase; font-family:monospace; font-weight:700;">
+            <span class="form-hint">Пример: RC → клиент получит RC-0001</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Стартовый номер кода</label>
+            <input type="number" class="form-control" id="cCodeStart" value="1" min="1">
+            <span class="form-hint">С какого номера начинать нумерацию</span>
+          </div>
+        </div>
+        <div class="form-section-h">Превью кода</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;" id="codePreview">
+          <div style="background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:12px;padding:12px 20px;">
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Пример кода клиента</div>
+            <div style="font-size:20px;font-weight:800;font-family:monospace;color:var(--primary-light);" id="previewKg">RC-0001</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: Цены и штрафы -->
+      <div class="form-tab-panel" id="ftab4">
+        <div class="form-section-h">Базовые тарифы</div>
+        <div class="fg2">
+          <div class="form-group">
+            <label class="form-label">Цена по умолчанию за кг (сом)</label>
+            <div class="input-group">
+              <span class="input-group-icon">⚖️</span>
+              <input type="number" class="form-control" id="cPriceKg" placeholder="450" min="0">
+            </div>
+            <span class="form-hint">Применяется, если у клиента нет индивидуального тарифа</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Штраф за хранение (сом/день)</label>
+            <div class="input-group">
+              <span class="input-group-icon">📆</span>
+              <input type="number" class="form-control" id="cStorageFine" placeholder="50" min="0">
+            </div>
+            <span class="form-hint">Начисляется после N дней хранения на складе</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Бесплатных дней хранения</label>
+            <input type="number" class="form-control" id="cStorageFree" placeholder="14" min="0">
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: Реквизиты -->
+      <div class="form-tab-panel" id="ftab5">
+        <div class="form-section-h">Банковские реквизиты</div>
+        <div class="fg2">
+          <div class="form-group">
+            <label class="form-label">Название банка</label>
+            <input class="form-control" id="cBankName" placeholder="Mbank / Oптима Банк / RSK">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Имя владельца счёта</label>
+            <input class="form-control" id="cBankOwner" placeholder="Асанов Нурбек Асанович">
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Номер телефона / счета</label>
+            <input class="form-control" id="cBankAccount" placeholder="+996 700 123 456" style="font-family:monospace; font-size:16px;">
+          </div>
+        </div>
+
+        <div class="form-section-h">QR-коды для оплаты</div>
+        <div class="fg2">
+          <div class="form-group">
+            <label class="form-label">QR-код для оплаты (банк/Kaspi)</label>
+            <div class="photo-uploader" onclick="this.querySelector('input').click()">
+              <input type="file" accept="image/*" onchange="previewPhoto(this,'prevQr1')">
+              <img id="prevQr1" class="photo-preview">
+              <div id="prevQr1placeholder">
+                <div class="photo-uploader-icon">🏦</div>
+                <div class="photo-uploader-label">Нажмите для загрузки</div>
+                <div class="photo-uploader-sub">PNG, JPG до 5 МБ</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">QR-код Telegram-бота (доп.)</label>
+            <div class="photo-uploader" onclick="this.querySelector('input').click()">
+              <input type="file" accept="image/*" onchange="previewPhoto(this,'prevQr2')">
+              <img id="prevQr2" class="photo-preview">
+              <div id="prevQr2placeholder">
+                <div class="photo-uploader-icon">🤖</div>
+                <div class="photo-uploader-label">QR-код бота для клиентов</div>
+                <div class="photo-uploader-sub">PNG, JPG до 5 МБ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /modal-body -->
+
+    <!-- Modal Footer -->
+    <div class="modal-footer" style="flex-shrink:0;">
+      <div style="display:flex;gap:8px;margin-right:auto;">
+        <button class="btn btn-ghost btn-sm" id="prevTabBtn" onclick="changeTab(-1)" disabled>← Назад</button>
+        <button class="btn btn-secondary btn-sm" id="nextTabBtn" onclick="changeTab(1)">Далее →</button>
+      </div>
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="saveCompany()">✅ Сохранить компанию</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- BLOCK CONFIRM MODAL -->
+<div class="modal-overlay" id="blockModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><div class="modal-title">⛔ Заблокировать компанию?</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body"><p style="color:var(--text-secondary);">Все операторы <strong id="blockCompName" style="color:var(--text-primary);"></strong> потеряют доступ. Клиентские данные сохранятся.</p></div>
+    <div class="modal-footer"><button class="btn btn-secondary" data-modal-close>Отмена</button><button class="btn btn-danger" onclick="confirmBlock()">Заблокировать</button></div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../assets/js/app.js"></script>
+<script>
+let companies = JSON.parse(JSON.stringify(ZeaData.companies));
+let blockTarget = null;
+let editTarget = null;
+let currentTab = 0;
+const totalTabs = 6;
+
+const tariffColors = { Старт: 'info', Бизнес: 'purple', Корпорат: 'warning' };
+
+/* ---- Render Table ---- */
+function renderTable(data) {
+  document.getElementById('totalCount').textContent = data.length;
+  document.getElementById('companiesTable').innerHTML = data.length
+    ? data.map(c => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:38px;height:38px;border-radius:10px;background:rgba(108,99,255,0.12);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏢</div>
+            <div>
+              <div style="font-weight:700;font-size:14px;">${c.name}</div>
+              <div style="font-size:12px;color:var(--text-muted);">${c.email || 'admin@' + c.code.toLowerCase().replace('-','') + '.com'}</div>
+            </div>
+          </div>
+        </td>
+        <td style="font-family:monospace;font-size:12px;color:var(--primary-light);font-weight:700;">${c.code}</td>
+        <td style="font-size:13px;color:var(--text-secondary);">${c.city}${c.branch ? ' · ' + c.branch : ''}</td>
+        <td><span class="badge badge-${tariffColors[c.tariff] || 'neutral'}">${c.tariff}</span></td>
+        <td style="font-weight:700;">${c.clients}</td>
+        <td style="font-weight:700;">${c.orders}</td>
+        <td><span class="badge badge-${c.status === 'active' ? 'success' : 'neutral'}">${c.status === 'active' ? 'Активна' : 'Пауза'}</span></td>
+        <td>
+          <div class="table-actions">
+            <a href="company-detail.html?id=${c.id}" class="btn btn-ghost btn-icon-sm" title="Детали">👁</a>
+            <button class="btn btn-ghost btn-icon-sm" title="Редактировать" onclick="openCompanyModal(${c.id})">✏️</button>
+            <button class="btn btn-ghost btn-icon-sm" title="Заблокировать/Разблокировать" onclick="blockCompany(${c.id},'${c.name}')">⛔</button>
+          </div>
+        </td>
+      </tr>
+    `).join('')
+    : `<tr><td colspan="9"><div class="table-empty"><span class="table-empty-icon">🏢</span>Карго не найдено</div></td></tr>`;
+}
+
+/* ---- Filters ---- */
+function applyFilter() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('statusFilter').value;
+  const tariff = document.getElementById('tariffFilter').value;
+  renderTable(companies.filter(c => {
+    if (q && !`${c.name} ${c.code} ${c.city}`.toLowerCase().includes(q)) return false;
+    if (status && c.status !== status) return false;
+    if (tariff && c.tariff !== tariff) return false;
+    return true;
+  }));
+}
+
+function clearFilter() {
+  ['searchInput','statusFilter','tariffFilter'].forEach(id => document.getElementById(id).value = '');
+  applyFilter();
+}
+
+/* ---- Tab navigation ---- */
+function switchFormTab(idx, btn) {
+  currentTab = idx;
+  document.querySelectorAll('.form-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  document.querySelectorAll('.form-tab-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+  document.getElementById('prevTabBtn').disabled = idx === 0;
+  document.getElementById('nextTabBtn').style.display = idx === totalTabs - 1 ? 'none' : '';
+}
+
+function changeTab(dir) {
+  const tabs = document.querySelectorAll('.form-tab');
+  const newIdx = Math.max(0, Math.min(totalTabs - 1, currentTab + dir));
+  switchFormTab(newIdx, tabs[newIdx]);
+}
+
+/* ---- Open Modal ---- */
+function openCompanyModal(id = null) {
+  editTarget = id;
+  currentTab = 0;
+  switchFormTab(0, document.querySelectorAll('.form-tab')[0]);
+
+  const company = id ? companies.find(c => c.id === id) : null;
+  document.getElementById('modalTitle').textContent = company ? `Редактировать: ${company.name}` : 'Добавить карго';
+
+  if (company) {
+    // Fill existing data
+    document.getElementById('cName').value         = company.name || '';
+    document.getElementById('cCode').value         = company.code || '';
+    document.getElementById('cCity').value         = company.city || '';
+    document.getElementById('cBranch').value       = company.branch || '';
+    document.getElementById('cEmail').value        = company.email || '';
+    document.getElementById('cTariff').value       = company.tariff || 'Бизнес';
+    document.getElementById('cCodePrefix').value   = company.codePrefix || '';
+    document.getElementById('cCodeStart').value    = company.codeStart || 1;
+    document.getElementById('cPriceKg').value      = company.priceKg || '';
+    document.getElementById('cStorageFine').value  = company.storageFine || '';
+    document.getElementById('cStorageFree').value  = company.storageFree || 14;
+    document.getElementById('cBankName').value     = company.bankName || '';
+    document.getElementById('cBankOwner').value    = company.bankOwner || '';
+    document.getElementById('cBankAccount').value  = company.bankAccount || '';
+    document.getElementById('cAddress').value      = company.address || '';
+    document.getElementById('cManagerPhone').value = company.managerPhone || '';
+    document.getElementById('cMapLink').value      = company.mapLink || '';
+    document.getElementById('cWorktime').value     = company.worktime || '';
+    document.getElementById('cInstagram').value    = company.instagram || '';
+    document.getElementById('cWarehouseName').value    = company.warehouseName || '';
+    document.getElementById('cWarehousePhone').value   = company.warehousePhone || '';
+    document.getElementById('cWarehouseAddressCn').value = company.warehouseAddressCn || '';
+  } else {
+    // Reset form
+    ['cName','cCode','cCity','cBranch','cEmail','cPass','cAddress','cManagerPhone','cMapLink',
+     'cWorktime','cInstagram','cPublicEmail','cWarehouseName','cWarehousePhone',
+     'cWarehouseAddressCn','cCodePrefix','cPriceKg','cStorageFine','cBankName',
+     'cBankOwner','cBankAccount'].forEach(id => {
+       const el = document.getElementById(id);
+       if (el) el.value = '';
+     });
+    document.getElementById('cPass').value = 'Cargo2025!';
+    document.getElementById('cCodeStart').value = 1;
+    document.getElementById('cStorageFree').value = 14;
+    document.getElementById('cTariff').value = 'Бизнес';
+  }
+
+  updateCodePreview();
+  Modal.open('companyModal');
+}
+
+/* ---- Code preview ---- */
+function padNum(n, start) {
+  return String(start).padStart(4, '0');
+}
+function updateCodePreview() {
+  const pfx   = (document.getElementById('cCodePrefix').value || 'RC').toUpperCase();
+  const start = String(document.getElementById('cCodeStart').value || 1).padStart(4, '0');
+  document.getElementById('previewKg').textContent = `${pfx}-${start}`;
+}
+['cCodePrefix','cCodeStart'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', updateCodePreview);
+});
+
+/* ---- Photo preview ---- */
+function previewPhoto(input, previewId) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById(previewId);
+    const ph  = document.getElementById(previewId + 'placeholder');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    if (ph) ph.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ---- Save ---- */
+function saveCompany() {
+  const name  = document.getElementById('cName').value.trim();
+  const code  = document.getElementById('cCode').value.trim().toUpperCase();
+  const email = document.getElementById('cEmail').value.trim();
+  if (!name || !code || !email) {
+    Toast.warning('Заполните обязательные поля', 'Вкладка «Основное»');
+    switchFormTab(0, document.querySelectorAll('.form-tab')[0]);
+    return;
+  }
+
+  const data = {
+    name, code, email,
+    city:   document.getElementById('cCity').value.trim() || '—',
+    branch: document.getElementById('cBranch').value.trim(),
+    tariff: document.getElementById('cTariff').value,
+    codePrefix:   document.getElementById('cCodePrefix').value.toUpperCase(),
+    codeStart: parseInt(document.getElementById('cCodeStart').value) || 1,
+    priceKg:    parseFloat(document.getElementById('cPriceKg').value) || 0,
+    storageFine: parseFloat(document.getElementById('cStorageFine').value) || 0,
+    storageFree: parseInt(document.getElementById('cStorageFree').value) || 14,
+    bankName:    document.getElementById('cBankName').value.trim(),
+    bankOwner:   document.getElementById('cBankOwner').value.trim(),
+    bankAccount: document.getElementById('cBankAccount').value.trim(),
+    address:     document.getElementById('cAddress').value.trim(),
+    managerPhone: document.getElementById('cManagerPhone').value.trim(),
+    mapLink:     document.getElementById('cMapLink').value.trim(),
+    worktime:    document.getElementById('cWorktime').value.trim(),
+    instagram:   document.getElementById('cInstagram').value.trim(),
+    warehouseName:    document.getElementById('cWarehouseName').value.trim(),
+    warehousePhone:   document.getElementById('cWarehousePhone').value.trim(),
+    warehouseAddressCn: document.getElementById('cWarehouseAddressCn').value.trim(),
+  };
+
+  if (editTarget) {
+    const idx = companies.findIndex(c => c.id === editTarget);
+    if (idx !== -1) Object.assign(companies[idx], data);
+    Toast.success('Карго обновлено!', name);
+  } else {
+    companies.unshift({ id: Date.now(), clients: 0, orders: 0, debt: 0, status: 'active', since: new Date().getFullYear().toString(), ...data });
+    Toast.success('Карго добавлено!', `Логин: ${email}`);
+  }
+
+  renderTable(companies);
+  Modal.close('companyModal');
+}
+
+/* ---- Block ---- */
+function blockCompany(id, name) {
+  blockTarget = id;
+  document.getElementById('blockCompName').textContent = name;
+  Modal.open('blockModal');
+}
+function confirmBlock() {
+  const c = companies.find(x => x.id === blockTarget);
+  if (c) {
+    c.status = c.status === 'active' ? 'paused' : 'active';
+    Toast[c.status === 'paused' ? 'warning' : 'success'](c.status === 'paused' ? 'Карго приостановлено' : 'Карго активировано', c.name);
+  }
+  renderTable(companies);
+  Modal.close('blockModal');
+}
+
+/* ---- Utilities ---- */
+function genPass() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#';
+  document.getElementById('cPass').value = Array.from({length:12}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+document.getElementById('searchInput').addEventListener('input', ZeaUtils.debounce(applyFilter, 250));
+renderTable(companies);
+</script>
+</body>
+</html>

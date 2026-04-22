@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Детали заказа — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .detail-grid { display:grid; grid-template-columns:1fr 340px; gap:20px; align-items:start; }
+    .info-row { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border-subtle); font-size:14px; }
+    .info-row:last-child { border-bottom:none; padding-bottom:0; }
+    .info-label { color:var(--text-muted); font-weight:500; }
+    .info-value { color:var(--text-primary); font-weight:600; text-align:right; }
+    .track-header { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+    .track-num { font-family:monospace; font-size:22px; font-weight:800; color:var(--primary-light); letter-spacing:.05em; }
+    .photos-gallery { display:flex; flex-wrap:wrap; gap:10px; }
+    .gallery-img { width:80px; height:80px; border-radius:var(--radius-md); background:var(--bg-elevated); border:1px solid var(--border-subtle); display:flex; align-items:center; justify-content:center; font-size:28px; cursor:pointer; transition:all .2s; }
+    .gallery-img:hover { border-color:var(--primary); transform:scale(1.05); }
+    .payment-summary { background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:20px; }
+    .pay-row { display:flex; justify-content:space-between; font-size:14px; margin-bottom:10px; }
+    .pay-row:last-child { margin-bottom:0; }
+    .pay-total { display:flex; justify-content:space-between; font-size:18px; font-weight:800; padding-top:12px; border-top:1px solid var(--border-subtle); margin-top:12px; }
+    @media(max-width:900px){ .detail-grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link active"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb">
+      <a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a>
+      <span style="color:var(--text-muted);">/</span>
+      <a href="index.html" style="color:var(--text-muted);text-decoration:none;">Заказы</a>
+      <span style="color:var(--text-muted);">/</span>
+      <span>CN2024110001</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button>
+    <button class="btn btn-secondary btn-sm" data-modal-open="editModal">✏️ Редактировать</button>
+    <button class="btn btn-primary btn-sm" data-modal-open="paymentModal">💳 Оплата</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+
+      <div style="margin-bottom:20px;" class="animate-fade-up">
+        <a href="index.html" class="btn btn-ghost btn-sm">← Назад к заказам</a>
+      </div>
+
+      <!-- Order Header -->
+      <div class="card animate-fade-up delay-100" style="margin-bottom:20px;">
+        <div class="track-header">
+          <div style="font-size:28px;">📦</div>
+          <div>
+            <div class="track-num">CN2024110001</div>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:3px;">Создан 01.11.2024</div>
+          </div>
+          <span class="badge badge-warning" style="font-size:13px; padding:6px 14px;">🚚 В пути</span>
+          <span class="badge badge-danger" style="font-size:13px; padding:6px 14px;">⚠️ Не оплачен</span>
+          <div style="margin-left:auto; display:flex; gap:8px;">
+            <button class="btn btn-secondary btn-sm" data-modal-open="statusModal">🔄 Статус</button>
+            <button class="btn btn-ghost btn-sm" onclick="notify()">🔔 Уведомить</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-grid animate-fade-up delay-200">
+        <!-- Left -->
+        <div style="display:flex; flex-direction:column; gap:20px;">
+
+          <!-- Goods Info -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🏷️ Информация о товаре</div>
+            </div>
+            <div class="info-row"><span class="info-label">Вес</span><span class="info-value">1.2 кг</span></div>
+            <div class="info-row"><span class="info-label">Цена за кг</span><span class="info-value">800 сом/кг</span></div>
+            <div class="info-row"><span class="info-label">Итого</span><span class="info-value" style="font-size:18px; color:var(--primary-light);">960 сом</span></div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📍 История движения</div>
+              <button class="btn btn-primary btn-sm" data-modal-open="statusModal">+ Обновить статус</button>
+            </div>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-indicator">
+                  <div class="timeline-dot done">✓</div>
+                  <div class="timeline-line done"></div>
+                </div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Принят на складе в Китае</div>
+                  <div class="timeline-date">01 ноябрь 2024, 09:30</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-indicator">
+                  <div class="timeline-dot done">✓</div>
+                  <div class="timeline-line done"></div>
+                </div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Подготовлен к отправке</div>
+                  <div class="timeline-date">03 ноябрь 2024, 14:00</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-indicator">
+                  <div class="timeline-dot current">→</div>
+                  <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                  <div class="timeline-title" style="color:var(--primary-light);">В пути (текущий статус)</div>
+                  <div class="timeline-date">05 ноябрь 2024, 08:00</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-indicator">
+                  <div class="timeline-dot pending">4</div>
+                  <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                  <div class="timeline-title" style="color:var(--text-muted);">Прибыл в страну</div>
+                  <div class="timeline-date" style="color:var(--text-disabled);">Ожидается ~20 ноябрь 2024</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-indicator">
+                  <div class="timeline-dot pending">5</div>
+                  <div class="timeline-line"></div>
+                </div>
+                <div class="timeline-content">
+                  <div class="timeline-title" style="color:var(--text-muted);">Готов к выдаче</div>
+                  <div class="timeline-date" style="color:var(--text-disabled);">Ожидается</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-indicator">
+                  <div class="timeline-dot pending">6</div>
+                </div>
+                <div class="timeline-content">
+                  <div class="timeline-title" style="color:var(--text-muted);">Выдан клиенту</div>
+                  <div class="timeline-date" style="color:var(--text-disabled);">Ожидается</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Photos -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📷 Фотографии</div>
+              <button class="btn btn-ghost btn-sm" onclick="Toast.info('Загрузка фото','Функция в разработке')">+ Добавить</button>
+            </div>
+            <div class="photos-gallery">
+              <div class="gallery-img" title="Фото 1">👟</div>
+              <div class="gallery-img" title="Фото 2">📦</div>
+              <div class="gallery-img" title="Фото 3">🏷️</div>
+              <div class="gallery-img" style="border-style:dashed; cursor:pointer;" onclick="Toast.info('Добавить фото')">+</div>
+            </div>
+          </div>
+
+          <!-- Comment -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">💬 Комментарий</div>
+              <button class="btn btn-ghost btn-sm" id="saveCommentBtn" onclick="saveComment()" style="display:none;">💾 Сохранить</button>
+            </div>
+            <textarea class="form-control" id="commentField" rows="3" placeholder="Добавить заметку к заказу…" oninput="document.getElementById('saveCommentBtn').style.display='block'">Клиент просил уведомить при получении на складе в Алматы.</textarea>
+          </div>
+
+        </div>
+
+        <!-- Right -->
+        <div style="display:flex; flex-direction:column; gap:16px; position:sticky; top:calc(var(--header-height) + 24px);">
+
+          <!-- Client Card -->
+          <div class="card">
+            <div class="card-header" style="margin-bottom:16px;">
+              <div class="card-title">👤 Клиент</div>
+              <a href="../clients/detail.html?id=1" class="btn btn-ghost btn-sm">Карточка →</a>
+            </div>
+            <div style="display:flex; gap:12px; align-items:center;">
+              <div class="avatar avatar-lg" style="background:linear-gradient(135deg,#6C63FF,#5248CC);">НА</div>
+              <div>
+                <div style="font-size:16px; font-weight:700; color:var(--text-primary);">Нурбек Асанов</div>
+                <div style="font-size:13px; color:var(--text-muted); margin-top:3px;">+996 700 123 456</div>
+                <div style="font-size:13px; color:var(--text-muted);">@nurbek_a</div>
+              </div>
+            </div>
+            <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border-subtle);">
+              <div style="font-size:12px; color:var(--text-muted);">Общий долг клиента</div>
+              <div style="font-size:22px; font-weight:800; color:var(--danger-light);">3 200 с</div>
+            </div>
+          </div>
+
+          <!-- Payment Block -->
+          <div class="card">
+            <div class="card-header" style="margin-bottom:16px;">
+              <div class="card-title">💳 Оплата</div>
+            </div>
+            <div class="payment-summary">
+              <div class="pay-row"><span style="color:var(--text-muted);">Стоимость доставки</span><span style="font-weight:600;">960 с</span></div>
+              <div class="pay-row"><span style="color:var(--text-muted);">Оплачено</span><span style="font-weight:600; color:var(--success-light);">0 с</span></div>
+              <div class="pay-total"><span>Остаток долга</span><span style="color:var(--danger-light);">960 с</span></div>
+            </div>
+            <button class="btn btn-primary w-full" style="margin-top:16px;" data-modal-open="paymentModal">💳 Принять оплату</button>
+          </div>
+
+          <!-- Dates -->
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">📅 Даты</div>
+            <div class="info-row" style="padding:8px 0;"><span class="info-label">Поступление</span><span class="info-value">01.11.2024</span></div>
+            <div class="info-row" style="padding:8px 0;"><span class="info-label">Отправка</span><span class="info-value">05.11.2024</span></div>
+            <div class="info-row" style="padding:8px 0;"><span class="info-label">Ожидаемое прибытие</span><span class="info-value" style="color:var(--warning-light);">~20.11.2024</span></div>
+            <div class="info-row" style="padding:8px 0;"><span class="info-label">Выдан</span><span class="info-value" style="color:var(--text-disabled);">—</span></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- STATUS MODAL -->
+<div class="modal-overlay" id="statusModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><div class="modal-title">Изменить статус</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Заказ: <strong>CN2024110001</strong></div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Новый статус доставки</label>
+        <select class="form-control" id="newDeliveryStatus">
+          <option value="in_transit" selected>В пути</option>
+          <option value="arrived">В Кыргызстане</option>
+          <option value="ready">Готов к выдаче</option>
+          <option value="issued">Выдано</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="updateStatus()">Обновить статус</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><div class="modal-title">Принять оплату</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body">
+      <div style="text-align:center; padding:16px; background:var(--bg-elevated); border-radius:var(--radius-lg); margin-bottom:20px;">
+        <div style="font-size:12px;color:var(--text-muted);">Остаток долга по заказу</div>
+        <div style="font-size:32px;font-weight:900;color:var(--danger-light);">960 с</div>
+      </div>
+      <div class="form-group"><label class="form-label">Сумма <span class="required">*</span></label><input type="number" class="form-control" id="payAmt" placeholder="960" min="1"></div>
+      <div class="form-group" style="margin-bottom:0;"><label class="form-label">Способ оплаты</label>
+        <select class="form-control" id="payMeth"><option>Наличные</option><option>Карта</option><option>Перевод</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-success" onclick="acceptPay()">Принять</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Редактировать заказ</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr;gap:16px;">
+        <div class="form-group"><label class="form-label">Трек-номер</label><input class="form-control" value="CN2024110001" style="font-family:monospace;"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+        <div class="form-group"><label class="form-label">Вес (кг)</label><input class="form-control" type="number" value="1.2"></div>
+        <div class="form-group"><label class="form-label">Цена/кг</label><input class="form-control" type="number" value="800"></div>
+        <div class="form-group"><label class="form-label">Итого</label><input class="form-control" type="number" value="960" readonly style="color:var(--primary-light);font-weight:700;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="Modal.close('editModal'); Toast.success('Заказ обновлён');">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+function notify() { Toast.success('Уведомление отправлено', 'Нурбек Асанов · Telegram'); }
+function saveComment() { document.getElementById('saveCommentBtn').style.display='none'; Toast.success('Заметка сохранена'); }
+function updateStatus() {
+  const s = document.getElementById('newDeliveryStatus').value;
+  const labels = { in_transit:'В пути', ready:'Готов к выдаче', arrived:'В Кыргызстане', issued:'Выдано' };
+  Modal.close('statusModal');
+  Toast.success('Статус обновлён', labels[s] || s);
+}
+function acceptPay() {
+  const amt = parseInt(document.getElementById('payAmt').value);
+  if (!amt) { Toast.warning('Введите сумму'); return; }
+  Modal.close('paymentModal');
+  Toast.success(`Оплата ${amt.toLocaleString()} с принята!`);
+}
+</script>
+</body>
+</html>

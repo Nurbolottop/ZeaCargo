@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Карточка клиента — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .profile-header {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      margin-bottom: var(--space-6);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .profile-avatar {
+      width: 88px; height: 88px;
+      border-radius: var(--radius-xl);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; font-weight: 800; color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 8px 32px rgba(108,99,255,0.35);
+    }
+    .profile-info { flex: 1; }
+    .profile-name { font-size: 26px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 6px; }
+    .profile-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
+    .profile-meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); }
+    .profile-actions { display: flex; gap: 10px; flex-wrap: wrap; flex-shrink: 0; }
+
+    .debt-block {
+      background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(239,68,68,0.04) 100%);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: var(--radius-xl);
+      padding: 24px 28px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .debt-block.no-debt {
+      background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(16,185,129,0.04) 100%);
+      border-color: rgba(16,185,129,0.25);
+    }
+    .debt-amount { font-size: 40px; font-weight: 900; color: var(--danger-light); letter-spacing: -0.04em; }
+    .debt-block.no-debt .debt-amount { color: var(--success-light); }
+    .debt-label { font-size: 13px; color: var(--text-muted); margin-bottom: 2px; }
+
+    .stat-mini-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-mini { background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 16px 20px; text-align: center; }
+    .stat-mini-val { font-size: 26px; font-weight: 800; color: var(--text-primary); }
+    .stat-mini-lbl { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    .comment-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      min-height: 60px;
+    }
+    .payment-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border-subtle); }
+    .payment-row:last-child { border-bottom:none; padding-bottom:0; }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link active"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb">
+      <a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a>
+      <span style="color:var(--text-muted);">/</span>
+      <a href="index.html" style="color:var(--text-muted);text-decoration:none;">Клиенты</a>
+      <span style="color:var(--text-muted);">/</span>
+      <span id="breadcrumbName">Нурбек Асанов</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button>
+    <button class="btn btn-primary btn-sm" data-modal-open="paymentModal">💳 Принять оплату</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+
+      <!-- Back -->
+      <div class="animate-fade-up" style="margin-bottom:20px;">
+        <a href="index.html" class="btn btn-ghost btn-sm">← Назад к клиентам</a>
+      </div>
+
+      <!-- Profile Header -->
+      <div class="profile-header animate-fade-up delay-100" id="profileHeader">
+        <div class="profile-avatar" id="profileAvatar" style="background:linear-gradient(135deg,#6C63FF,#5248CC);">НА</div>
+        <div class="profile-info">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <div class="profile-name" id="profileName">Нурбек Асанов</div>
+            <span class="badge badge-success">Активен</span>
+          </div>
+          <div class="profile-meta">
+            <div class="profile-meta-item">📞 <span id="profilePhone">+996 700 123 456</span></div>
+            <div class="profile-meta-item">✈ <span id="profileTelegram">@nurbek_a</span></div>
+            <div class="profile-meta-item">📅 Клиент с <span id="profileJoined">10.06.2024</span></div>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn btn-secondary btn-sm" data-modal-open="editClientModal">✏️ Редактировать</button>
+          <button class="btn btn-secondary btn-sm" onclick="sendNotif()">🔔 Уведомить</button>
+          <button class="btn btn-danger btn-sm" onclick="Toast.warning('Блокировка','Функция недоступна в демо')">⛔ Заблокировать</button>
+        </div>
+      </div>
+
+      <!-- Stats + Debt Grid -->
+      <div style="display:grid; grid-template-columns:1fr 320px; gap:20px; margin-bottom:24px;" class="animate-fade-up delay-200">
+        <div>
+          <div class="stat-mini-grid">
+            <div class="stat-mini">
+              <div class="stat-mini-val" id="totalOrders">12</div>
+              <div class="stat-mini-lbl">Всего заказов</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-val" style="color:var(--warning-light);">3</div>
+              <div class="stat-mini-lbl">В пути сейчас</div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-val" style="color:var(--success-light);">9</div>
+              <div class="stat-mini-lbl">Завершено</div>
+            </div>
+          </div>
+
+          <!-- Comment -->
+          <div>
+            <div style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:8px;">Заметки оператора</div>
+            <div class="comment-box" contenteditable="true" id="commentBox" onblur="saveComment()">
+              Постоянный клиент. Предпочитает доставку до двери. Иногда задерживает оплату, но всегда закрывает долг.
+            </div>
+          </div>
+        </div>
+
+        <!-- Debt Block -->
+        <div>
+          <div class="debt-block" id="debtBlock">
+            <div style="font-size:36px;">⚠️</div>
+            <div>
+              <div class="debt-label">Текущий долг</div>
+              <div class="debt-amount" id="debtAmount">3 200 с</div>
+              <div style="margin-top:10px; display:flex; gap:8px;">
+                <button class="btn btn-danger btn-sm" data-modal-open="paymentModal">Принять оплату</button>
+                <button class="btn btn-ghost btn-sm" onclick="Toast.info('SMS','Напоминание отправлено')">📱 Напомнить</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-line animate-fade-up delay-300" style="margin-bottom:20px;">
+        <button class="tab-btn active" data-tab="orders" data-tab-group="client">📦 Заказы (12)</button>
+        <button class="tab-btn" data-tab="payments" data-tab-group="client">💳 Оплаты</button>
+        <button class="tab-btn" data-tab="notifications" data-tab-group="client">🔔 Уведомления</button>
+      </div>
+
+      <!-- Tab: Orders -->
+      <div data-tab-content="orders" class="animate-fade-up delay-300">
+        <div class="card" style="padding:0;">
+          <div class="table-container" style="border:none;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Трек-номер</th>
+                  <th>Магазин</th>
+                  <th>Описание</th>
+                  <th>Вес</th>
+                  <th>Сумма</th>
+                  <th>Статус</th>
+                  <th>Оплата</th>
+                  <th>Дата</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:monospace;font-size:12px;color:var(--text-muted);">CN2024110001</td>
+                  <td>Taobao</td>
+                  <td>Кроссовки Nike</td>
+                  <td>1.2 кг</td>
+                  <td style="font-weight:700;">960 с</td>
+                  <td><span class="badge badge-warning">В пути</span></td>
+                  <td><span class="badge badge-danger">Штраф</span></td>
+                  <td style="font-size:12px;color:var(--text-muted);">01.11.2024</td>
+                  <td><a href="../orders/detail.html?id=1" class="btn btn-ghost btn-icon-sm">👁</a></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;font-size:12px;color:var(--text-muted);">CN2024110007</td>
+                  <td>1688.com</td>
+                  <td>Куртка зимняя</td>
+                  <td>2.1 кг</td>
+                  <td style="font-weight:700;">1 680 с</td>
+                  <td><span class="badge badge-success">Готов</span></td>
+                  <td><span class="badge badge-danger">Штраф</span></td>
+                  <td style="font-size:12px;color:var(--text-muted);">05.11.2024</td>
+                  <td><a href="../orders/detail.html?id=7" class="btn btn-ghost btn-icon-sm">👁</a></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;font-size:12px;color:var(--text-muted);">CN2024090012</td>
+                  <td>JD.com</td>
+                  <td>Наушники Xiaomi</td>
+                  <td>0.4 кг</td>
+                  <td style="font-weight:700;">320 с</td>
+                  <td><span class="badge badge-success">Выдан</span></td>
+                  <td><span class="badge badge-success">Оплачен</span></td>
+                  <td style="font-size:12px;color:var(--text-muted);">15.09.2024</td>
+                  <td><a href="../orders/detail.html?id=1" class="btn btn-ghost btn-icon-sm">👁</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="padding:12px 20px; border-top:1px solid var(--border-subtle);">
+            <a href="../orders/index.html" class="btn btn-ghost btn-sm">Все заказы клиента →</a>
+      <a href="../groups/index.html" class="sidebar-link" id="nav-groups">
+        <span class="sidebar-link-icon">📁</span>
+        <span class="sidebar-link-text">Группы</span>
+      </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Payments -->
+      <div data-tab-content="payments" style="display:none;">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">История оплат</div>
+            <button class="btn btn-primary btn-sm" data-modal-open="paymentModal">+ Принять оплату</button>
+          </div>
+          <div class="payment-row">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-primary);">Частичная оплата</div>
+              <div style="font-size:12px;color:var(--text-muted);">08 ноябрь 2024 · Наличные · Оператор: Алексей И.</div>
+            </div>
+            <div style="font-size:18px;font-weight:800;color:var(--success-light);">+500 с</div>
+          </div>
+          <div class="payment-row">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text-primary);">Полная оплата</div>
+              <div style="font-size:12px;color:var(--text-muted);">15 сент 2024 · Карта · Оператор: Алексей И.</div>
+            </div>
+            <div style="font-size:18px;font-weight:800;color:var(--success-light);">+320 с</div>
+          </div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-subtle);display:flex;justify-content:space-between;">
+            <span style="font-size:13px;color:var(--text-muted);">Итого оплачено</span>
+            <span style="font-size:16px;font-weight:700;color:var(--success-light);">820 с</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Notifications -->
+      <div data-tab-content="notifications" style="display:none;">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">История уведомлений</div>
+            <button class="btn btn-primary btn-sm" data-modal-open="notifModal">+ Отправить</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <div class="payment-row">
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:32px;height:32px;background:var(--success-bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">✅</div>
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--text-primary);">Заказ CN2024110007 готов к выдаче</div>
+                  <div style="font-size:12px;color:var(--text-muted);">Telegram · 05.11.2024 14:30 · Автоматически</div>
+                </div>
+              </div>
+            </div>
+            <div class="payment-row">
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:32px;height:32px;background:var(--warning-bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">⚠️</div>
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--text-primary);">Напоминание о задолженности 3 200 с</div>
+                  <div style="font-size:12px;color:var(--text-muted);">Telegram · 08.11.2024 10:00 · Алексей И.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Принять оплату</div>
+      <button class="modal-close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="text-align:center; margin-bottom:20px;">
+        <div style="font-size:13px;color:var(--text-muted);">Текущий долг</div>
+        <div style="font-size:32px; font-weight:800; color:var(--danger-light);">3 200 с</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Сумма оплаты <span class="required">*</span></label>
+        <div class="input-group">
+          <span class="input-group-icon">💰</span>
+          <input type="number" class="form-control" id="payAmount" placeholder="0" min="1" max="3200">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Способ оплаты</label>
+        <select class="form-control" id="payMethod">
+          <option value="cash">Наличные</option>
+          <option value="card">Карта</option>
+          <option value="transfer">Перевод</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Комментарий</label>
+        <input type="text" class="form-control" placeholder="Заметка к оплате" id="payComment">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-success" onclick="acceptPayment()">Принять оплату</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editClientModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Редактировать клиента</div>
+      <button class="modal-close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="form-group"><label class="form-label">Имя</label><input type="text" class="form-control" value="Нурбек"></div>
+        <div class="form-group"><label class="form-label">Фамилия</label><input type="text" class="form-control" value="Асанов"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Телефон</label><input type="tel" class="form-control" value="+996 700 123 456"></div>
+      <div class="form-group"><label class="form-label">Telegram</label><input type="text" class="form-control" value="@nurbek_a"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+function sendNotif() {
+  Toast.success('Уведомление отправлено', 'Клиент: Нурбек Асанов · Telegram');
+}
+function saveComment() {
+  Toast.success('Заметка сохранена');
+}
+function saveEdit() {
+  Modal.close('editClientModal');
+  Toast.success('Данные обновлены');
+}
+function acceptPayment() {
+  const amount = parseInt(document.getElementById('payAmount').value);
+  if (!amount || amount <= 0) { Toast.warning('Введите сумму'); return; }
+  const remaining = Math.max(0, 3200 - amount);
+  document.getElementById('debtAmount').textContent = remaining > 0 ? `${remaining.toLocaleString()} с` : '0 с';
+  if (remaining === 0) {
+    document.getElementById('debtBlock').classList.add('no-debt');
+  }
+  Modal.close('paymentModal');
+  Toast.success(`Оплата ${amount.toLocaleString()} с принята!`, remaining > 0 ? `Остаток долга: ${remaining.toLocaleString()} с` : 'Штраф полностью погашен!');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Создать заказ — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .form-section { background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-xl); padding:var(--space-6); margin-bottom:var(--space-5); }
+    .form-section-title { font-size:16px; font-weight:700; color:var(--text-primary); margin-bottom:var(--space-5); padding-bottom:var(--space-4); border-bottom:1px solid var(--border-subtle); display:flex; align-items:center; gap:10px; }
+    .form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .form-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+    .price-display { background:var(--bg-elevated); border:1px solid var(--border-default); border-radius:var(--radius-lg); padding:20px; text-align:center; margin-top:8px; }
+    .price-val { font-size:32px; font-weight:900; color:var(--primary-light); letter-spacing:-0.04em; }
+    .price-lbl { font-size:12px; color:var(--text-muted); margin-top:4px; }
+    .client-suggest { position:absolute; top:100%; left:0; right:0; background:var(--bg-elevated); border:1px solid var(--border-default); border-radius:var(--radius-lg); z-index:50; margin-top:4px; max-height:200px; overflow-y:auto; }
+    .client-suggest-item { padding:10px 14px; font-size:13px; color:var(--text-primary); cursor:pointer; border-bottom:1px solid var(--border-subtle); transition:background .15s; }
+    .client-suggest-item:last-child { border-bottom:none; }
+    .client-suggest-item:hover { background:var(--bg-hover); }
+    .photos-grid { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    .photo-thumb { width:72px; height:72px; border-radius:var(--radius-md); background:var(--bg-elevated); border:1px solid var(--border-subtle); display:flex; align-items:center; justify-content:center; font-size:24px; position:relative; cursor:pointer; }
+    .photo-remove { position:absolute; top:-6px; right:-6px; width:18px; height:18px; background:var(--danger); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px; cursor:pointer; }
+    @media(max-width:768px){ .form-grid-2,.form-grid-3{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link active"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb">
+      <a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a>
+      <span style="color:var(--text-muted);">/</span>
+      <a href="index.html" style="color:var(--text-muted);text-decoration:none;">Заказы</a>
+      <span style="color:var(--text-muted);">/</span>
+      <span>Новый заказ</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a href="index.html" class="btn btn-ghost btn-sm">← Отмена</a>
+    <button class="btn btn-primary btn-sm" onclick="saveOrder(false)">💾 Сохранить</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+
+      <div class="page-header animate-fade-up">
+        <div>
+          <h1>Новый заказ</h1>
+          <p>Заполните данные о посылке клиента</p>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 300px; gap:20px; align-items:start;" class="animate-fade-up delay-100">
+
+        <!-- Left Column -->
+        <div>
+          <!-- Client -->
+          <div class="form-section">
+            <div class="form-section-title">👤 Клиент</div>
+            <div class="form-group" style="position:relative; margin-bottom:0;">
+              <label class="form-label">Выберите клиента <span class="required">*</span></label>
+              <div class="input-group">
+                <span class="input-group-icon">🔍</span>
+                <input type="text" class="form-control" id="clientSearch" placeholder="Введите имя или телефон клиента…" autocomplete="off" oninput="searchClients(this.value)">
+              </div>
+              <div class="client-suggest" id="clientSuggest" style="display:none;"></div>
+            </div>
+            <div id="selectedClientCard" style="display:none; margin-top:12px; background:var(--bg-elevated); border:1px solid var(--border-default); border-radius:var(--radius-lg); padding:14px 16px; display:flex; align-items:center; gap:12px;">
+              <div class="avatar avatar-md" id="selClientAvatar" style="background:linear-gradient(135deg,#6C63FF,#5248CC);">НА</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700; color:var(--text-primary);" id="selClientName">Нурбек Асанов</div>
+                <div style="font-size:12px; color:var(--text-muted);" id="selClientPhone">+996 700 123 456</div>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="clearClient()">✕</button>
+            </div>
+          </div>
+
+          <!-- Order Info -->
+          <div class="form-section">
+            <div class="form-group">
+              <label class="form-label">Трек-номер <span class="required">*</span></label>
+              <input type="text" class="form-control" id="trackNumber" placeholder="CN2024110001" style="font-family:monospace;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Дата поступления</label>
+              <input type="date" class="form-control" id="arrivalDate">
+            </div>
+          </div>
+
+          <!-- Pricing -->
+          <div class="form-section">
+            <div class="form-section-title">💰 Стоимость доставки</div>
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label class="form-label">Вес (кг) <span class="required">*</span></label>
+                <input type="number" class="form-control" id="weight" placeholder="0.00" step="0.1" min="0" oninput="calcPrice()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Цена за кг (сом) <span class="required">*</span></label>
+                <input type="number" class="form-control" id="pricePerKg" placeholder="800" value="800" oninput="calcPrice()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Итого (автоподсчёт)</label>
+                <input type="number" class="form-control" id="totalPrice" placeholder="0" readonly style="font-weight:700; color:var(--primary-light);">
+              </div>
+            </div>
+          </div>
+
+          <!-- Status -->
+          <div class="form-section">
+            <div class="form-section-title">🚦 Статусы</div>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Статус доставки</label>
+                <select class="form-control" id="deliveryStatus">
+                  <option value="in_transit">В пути</option>
+                  <option value="arrived">В Кыргызстане</option>
+                  <option value="ready">Готов к выдаче</option>
+                  <option value="issued">Выдано</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Статус оплаты</label>
+                <select class="form-control" id="payStatus">
+                  <option value="unpaid">Не оплачен</option>
+                  <option value="partial">Частично оплачен</option>
+                  <option value="paid">Полностью оплачен</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Комментарий оператора</label>
+              <textarea class="form-control" id="comment" placeholder="Заметки к заказу…" rows="2"></textarea>
+            </div>
+          </div>
+
+          <!-- Photos -->
+          <div class="form-section">
+            <div class="form-section-title">📷 Фотографии</div>
+            <div class="file-upload" id="photoUpload" onclick="document.getElementById('photoInput').click()">
+              <input type="file" id="photoInput" multiple accept="image/*" style="display:none;" onchange="handlePhotos(this)">
+              <span class="file-upload-icon">🖼️</span>
+              <div class="file-upload-text">Нажмите или перетащите фотографии</div>
+              <div class="file-upload-hint">PNG, JPG, WebP до 5 МБ каждый</div>
+            </div>
+            <div class="photos-grid" id="photosGrid"></div>
+          </div>
+        </div>
+
+        <!-- Right Column — Price Summary -->
+        <div style="position:sticky; top:calc(var(--header-height) + 24px); display:flex; flex-direction:column; gap:16px;">
+          <div class="card" style="text-align:center;">
+            <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:12px;">К оплате</div>
+            <div class="price-val" id="priceDisplay">0 с</div>
+            <div style="font-size:12px; color:var(--text-muted); margin-top:8px;" id="priceBreakdown">Введите вес и цену за кг</div>
+          </div>
+
+          <div class="card" style="padding:20px;">
+            <div style="font-size:13px; font-weight:700; color:var(--text-secondary); margin-bottom:12px;">Готово к сохранению?</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;" id="checkList">
+              <div class="check-item" id="chk-client" style="display:flex;gap:8px;align-items:center;font-size:12px;color:var(--text-muted);">⬜ Клиент выбран</div>
+              <div class="check-item" id="chk-track" style="display:flex;gap:8px;align-items:center;font-size:12px;color:var(--text-muted);">⬜ Трек-номер</div>
+              <div class="check-item" id="chk-weight" style="display:flex;gap:8px;align-items:center;font-size:12px;color:var(--text-muted);">⬜ Вес указан</div>
+            </div>
+            <button class="btn btn-primary w-full" onclick="saveOrder(false)">💾 Сохранить заказ</button>
+            <button class="btn btn-secondary w-full" style="margin-top:8px;" onclick="saveOrder(true)">+ Сохранить и добавить ещё</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+// Set today's date
+document.getElementById('arrivalDate').value = new Date().toISOString().split('T')[0];
+
+// Client search
+let selectedClient = null;
+
+function searchClients(q) {
+  const suggest = document.getElementById('clientSuggest');
+  if (!q || q.length < 1) { suggest.style.display = 'none'; return; }
+  const matches = ZeaData.clients.filter(c =>
+    c.name.toLowerCase().includes(q.toLowerCase()) ||
+    c.phone.includes(q) ||
+    c.telegram.toLowerCase().includes(q.toLowerCase())
+  );
+  if (!matches.length) { suggest.style.display = 'none'; return; }
+  suggest.innerHTML = matches.map(c => `
+    <div class="client-suggest-item" onclick="selectClient(${c.id})">
+      <strong>${c.name}</strong> <span style="color:var(--text-muted); font-size:12px;">${c.phone}</span>
+    </div>
+  `).join('');
+  suggest.style.display = 'block';
+}
+
+function selectClient(id) {
+  const c = ZeaData.clients.find(x => x.id === id);
+  if (!c) return;
+  selectedClient = c;
+  document.getElementById('clientSearch').value = c.name;
+  document.getElementById('clientSuggest').style.display = 'none';
+  const card = document.getElementById('selectedClientCard');
+  document.getElementById('selClientName').textContent = c.name;
+  document.getElementById('selClientPhone').textContent = c.phone;
+  document.getElementById('selClientAvatar').textContent = ZeaUtils.getInitials(c.name);
+  document.getElementById('selClientAvatar').style.background = ZeaUtils.getAvatarColor(c.name);
+  card.style.display = 'flex';
+  updateChecks();
+}
+
+function clearClient() {
+  selectedClient = null;
+  document.getElementById('clientSearch').value = '';
+  document.getElementById('selectedClientCard').style.display = 'none';
+  updateChecks();
+}
+
+// Price calculation
+function calcPrice() {
+  const w = parseFloat(document.getElementById('weight').value) || 0;
+  const ppk = parseFloat(document.getElementById('pricePerKg').value) || 0;
+  const total = Math.round(w * ppk);
+  document.getElementById('totalPrice').value = total || '';
+  document.getElementById('priceDisplay').textContent = total > 0 ? `${total.toLocaleString()} с` : '0 с';
+  document.getElementById('priceBreakdown').textContent = total > 0 ? `${w} кг × ${ppk} с/кг` : 'Введите вес и цену за кг';
+  updateChecks();
+}
+
+// Checklist
+function updateChecks() {
+  const checks = {
+    'chk-client': !!selectedClient,
+    'chk-track': !!document.getElementById('trackNumber').value.trim(),
+    'chk-weight': parseFloat(document.getElementById('weight').value) > 0,
+  };
+  Object.entries(checks).forEach(([id, ok]) => {
+    const el = document.getElementById(id);
+    el.style.color = ok ? 'var(--success-light)' : 'var(--text-muted)';
+    el.textContent = (ok ? '✅ ' : '⬜ ') + el.textContent.replace(/^[✅⬜]\s/, '');
+  });
+}
+
+// Live checklist
+['trackNumber','weight','pricePerKg'].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', updateChecks);
+});
+
+// Photos
+let photos = [];
+function handlePhotos(input) {
+  const grid = document.getElementById('photosGrid');
+  Array.from(input.files).forEach(f => {
+    if (f.size > 5*1024*1024) { Toast.warning('Файл слишком большой', f.name); return; }
+    const url = URL.createObjectURL(f);
+    photos.push({ url, name: f.name });
+    const div = document.createElement('div');
+    div.className = 'photo-thumb';
+    div.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-md);" /><div class="photo-remove" onclick="removePhoto(this,'${url}')">✕</div>`;
+    grid.appendChild(div);
+  });
+}
+function removePhoto(btn, url) { photos = photos.filter(p => p.url !== url); btn.parentElement.remove(); }
+
+// Save
+function saveOrder(addMore) {
+  if (!selectedClient) { Toast.warning('Выберите клиента'); return; }
+  if (!document.getElementById('trackNumber').value.trim()) { Toast.warning('Введите трек-номер'); return; }
+  if (!parseFloat(document.getElementById('weight').value)) { Toast.warning('Введите вес'); return; }
+
+  Toast.success('Заказ создан!', `Трек: ${document.getElementById('trackNumber').value}`);
+  setTimeout(() => {
+    if (addMore) { document.getElementById('trackNumber').value = ''; document.getElementById('weight').value = ''; calcPrice(); }
+    else window.location.href = 'index.html';
+  }, 1000);
+}
+
+// Hide suggest on click outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('#clientSearch') && !e.target.closest('#clientSuggest')) {
+    document.getElementById('clientSuggest').style.display = 'none';
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Штрафы — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+</head>
+<body class="bg-mesh">
+
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link active"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb">
+      <a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a><span style="color:var(--text-muted);">/</span>
+      <a href="index.html" style="color:var(--text-muted);text-decoration:none;">Финансы</a><span style="color:var(--text-muted);">/</span>
+      <span>Штрафы</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button>
+    <button class="btn btn-secondary btn-sm" onclick="notifyAll()">🔔 Уведомить всех</button>
+    <button class="btn btn-primary btn-sm" data-modal-open="paymentModal">+ Принять оплату</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+
+      <div class="page-header animate-fade-up">
+        <div><h1>Штрафы</h1><p>Клиенты с начисленными штрафами</p></div>
+        <div class="page-header-actions">
+          <button class="btn btn-secondary btn-sm">📥 Экспорт</button>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;" class="animate-fade-up delay-100">
+        <div class="stat-card" style="--stat-accent:#EF4444;--stat-accent-bg:rgba(239,68,68,0.12);">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-content"><div class="stat-value">892К</div><div class="stat-label">Сумма штрафов</div></div>
+        </div>
+        <div class="stat-card" style="--stat-accent:#F59E0B;--stat-accent-bg:rgba(245,158,11,0.12);">
+          <div class="stat-icon">👥</div>
+          <div class="stat-content"><div class="stat-value">7</div><div class="stat-label">Клиентов</div></div>
+        </div>
+        <div class="stat-card" style="--stat-accent:#6C63FF;--stat-accent-bg:rgba(108,99,255,0.12);">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content"><div class="stat-value">127К</div><div class="stat-label">Средний штраф</div></div>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="filter-bar animate-fade-up delay-100">
+        <div class="search-bar" style="flex:1;min-width:200px;">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="form-control" id="searchInput" placeholder="Поиск по клиенту…">
+        </div>
+        <select class="form-control" style="width:160px;">
+          <option>Сортировка: штраф ↓</option>
+          <option>Сортировка: штраф ↑</option>
+          <option>Сортировка: заказы ↓</option>
+        </select>
+      </div>
+
+      <!-- Debtors Table -->
+      <div class="card animate-fade-up delay-200" style="padding:0;">
+        <div class="table-container" style="border:none;">
+          <table>
+            <thead>
+              <tr>
+                <th>Клиент</th>
+                <th>Телефон</th>
+                <th>Заказов со штрафом</th>
+                <th>Сумма штрафов</th>
+                <th>Последний заказ</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="debtorsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><div class="modal-title">Принять оплату</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Клиент</label>
+        <select class="form-control" id="payClient">
+          <option>Санжар Токтоматов (12 300 с)</option>
+          <option>Дамир Садыков (7 800 с)</option>
+          <option>Мадина Карибаева (4 200 с)</option>
+          <option>Нурбек Асанов (3 200 с)</option>
+          <option>Зарина Омурова (1 500 с)</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Сумма <span class="required">*</span></label><input type="number" class="form-control" id="payAmount" placeholder="0"></div>
+      <div class="form-group" style="margin-bottom:0;"><label class="form-label">Способ</label>
+        <select class="form-control"><option>Наличные</option><option>Карта</option><option>Перевод</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-success" onclick="doPay()">Принять ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+const debtors = [
+  { name:'Санжар Токтоматов', phone:'+996 999 789 012', ordersWithDebt:8, debt:12300, lastOrder:'05.11.2024', color:'linear-gradient(135deg,#EC4899,#DB2777)' },
+  { name:'Дамир Садыков', phone:'+996 702 345 678', ordersWithDebt:5, debt:7800, lastOrder:'03.11.2024', color:'linear-gradient(135deg,#F59E0B,#D97706)' },
+  { name:'Мадина Карибаева', phone:'+996 770 678 901', ordersWithDebt:3, debt:4200, lastOrder:'06.11.2024', color:'linear-gradient(135deg,#8B5CF6,#7C3AED)' },
+  { name:'Нурбек Асанов', phone:'+996 700 123 456', ordersWithDebt:2, debt:3200, lastOrder:'01.11.2024', color:'linear-gradient(135deg,#6C63FF,#5248CC)' },
+  { name:'Зарина Омурова', phone:'+996 503 456 789', ordersWithDebt:1, debt:1500, lastOrder:'04.11.2024', color:'linear-gradient(135deg,#3B82F6,#2563EB)' },
+];
+
+function renderDebtors(data) {
+  document.getElementById('debtorsTable').innerHTML = data.map(d => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="avatar avatar-sm" style="background:${d.color};font-size:10px;">${ZeaUtils.getInitials(d.name)}</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-primary);">${d.name}</div>
+        </div>
+      </td>
+      <td style="font-size:13px;color:var(--text-muted);">${d.phone}</td>
+      <td style="font-size:13px;font-weight:600;">${d.ordersWithDebt}</td>
+      <td style="font-size:15px;font-weight:800;color:var(--danger-light);">${d.debt.toLocaleString()} с</td>
+      <td style="font-size:12px;color:var(--text-muted);">${d.lastOrder}</td>
+      <td>
+        <div class="table-actions">
+          <button class="btn btn-danger btn-sm" onclick="openPay('${d.name}')">💳 Оплата</button>
+          <button class="btn btn-ghost btn-sm" onclick="notifyOne('${d.name}')">🔔</button>
+          <a href="../clients/detail.html" class="btn btn-ghost btn-icon-sm">👁</a>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openPay(name) {
+  document.getElementById('payClient').value = name;
+  Modal.open('paymentModal');
+}
+function notifyOne(name) { Toast.success('Напоминание отправлено', name + ' · Telegram'); }
+function notifyAll() { Toast.success('Напоминания отправлены', `${debtors.length} должникам`); }
+function doPay() {
+  const amt = parseInt(document.getElementById('payAmount').value);
+  if (!amt) { Toast.warning('Введите сумму'); return; }
+  Modal.close('paymentModal');
+  Toast.success(`Оплата ${amt.toLocaleString()} с принята!`);
+}
+
+document.getElementById('searchInput').addEventListener('input', ZeaUtils.debounce(e => {
+  const q = e.target.value.toLowerCase();
+  renderDebtors(debtors.filter(d => d.name.toLowerCase().includes(q)));
+}, 250));
+
+renderDebtors(debtors);
+</script>
+</body>
+</html>

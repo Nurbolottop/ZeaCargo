@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Клиенты — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .client-name-cell { display:flex; align-items:center; gap:10px; }
+    .client-info-name { font-size:14px; font-weight:600; color:var(--text-primary); }
+    .client-info-phone { font-size:12px; color:var(--text-muted); }
+    .bulk-bar {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: 12px 20px;
+      display: none;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .bulk-bar.visible { display: flex; }
+    .bulk-count { font-size: 14px; font-weight: 600; color: var(--primary-light); }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link active"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb">
+      <a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a>
+      <span style="color:var(--text-muted);">/</span>
+      <span>Клиенты</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button>
+    <button class="btn btn-primary btn-sm" data-modal-open="addClientModal">+ Добавить клиента</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+
+      <!-- Header -->
+      <div class="page-header animate-fade-up">
+        <div>
+          <h1>Клиенты</h1>
+          <p>Всего <strong id="totalCount">8</strong> клиентов в системе</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-secondary btn-sm" onclick="exportCSV()">📥 Экспорт</button>
+          <button class="btn btn-primary" data-modal-open="addClientModal">+ Добавить клиента</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar animate-fade-up delay-100">
+        <div class="search-bar" style="flex:1; min-width:220px;">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="form-control" id="searchInput" placeholder="Поиск по ФИО, телефону, Telegram…">
+        </div>
+        <select class="form-control" id="statusFilter" style="width:160px;" onchange="applyFilters()">
+          <option value="">Все статусы</option>
+          <option value="active">Активные</option>
+          <option value="inactive">Неактивные</option>
+        </select>
+        <select class="form-control" id="debtFilter" style="width:160px;" onchange="applyFilters()">
+          <option value="">Все клиенты</option>
+          <option value="debtors">Только должники</option>
+          <option value="clean">Без долгов</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Сбросить</button>
+      </div>
+
+      <!-- Bulk Bar -->
+      <div class="bulk-bar" id="bulkBar">
+        <span class="bulk-count" id="bulkCount">0 выбрано</span>
+        <button class="btn btn-secondary btn-sm" onclick="bulkNotify()">🔔 Уведомить</button>
+        <button class="btn btn-danger btn-sm" onclick="bulkDelete()">🗑 Удалить</button>
+        <button class="btn btn-ghost btn-sm" onclick="clearSelection()">✕</button>
+      </div>
+
+      <!-- Table -->
+      <div class="card animate-fade-up delay-200" style="padding:0;">
+        <div class="table-container" style="border:none;">
+          <table>
+            <thead>
+              <tr>
+                <th width="40"><input type="checkbox" class="table-checkbox" id="selectAll" onchange="toggleSelectAll(this)"></th>
+                <th>Клиент</th>
+                <th>Telegram</th>
+                <th>Заказов</th>
+                <th>Штраф</th>
+                <th>Статус</th>
+                <th>Дата</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="clientsTable">
+              <!-- filled by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-top:1px solid var(--border-subtle);">
+          <div class="pagination-info" id="paginationInfo">Показано 1–8 из 8</div>
+          <div class="pagination">
+            <button class="page-btn" disabled>←</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn" onclick="Toast.info('Стр.2','Нет данных')">2</button>
+            <button class="page-btn" onclick="Toast.info('Стр.3','Нет данных')">→</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ADD CLIENT MODAL -->
+<div class="modal-overlay" id="addClientModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Добавить клиента</div>
+      <button class="modal-close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div class="form-group">
+          <label class="form-label">Имя <span class="required">*</span></label>
+          <input type="text" class="form-control" placeholder="Нурбек" id="newFirstName">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Фамилия <span class="required">*</span></label>
+          <input type="text" class="form-control" placeholder="Асанов" id="newLastName">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Телефон <span class="required">*</span></label>
+        <div class="input-group">
+          <span class="input-group-icon">📞</span>
+          <input type="tel" class="form-control" placeholder="+996 700 000 000" id="newPhone">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telegram username</label>
+        <div class="input-group">
+          <span class="input-group-icon">✈</span>
+          <input type="text" class="form-control" placeholder="@username" id="newTelegram">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Комментарий</label>
+        <textarea class="form-control" placeholder="Заметки оператора…" rows="2" id="newComment"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="addClient()">Сохранить клиента</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Удалить клиента?</div>
+      <button class="modal-close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <p>Вы уверены, что хотите удалить клиента <strong id="deleteClientName"></strong>? Все заказы и история останутся.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Удалить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+let clients = [...ZeaData.clients];
+let filteredClients = [...clients];
+let selectedIds = new Set();
+let deleteTargetId = null;
+
+function renderTable(data) {
+  const tbody = document.getElementById('clientsTable');
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="table-empty"><span class="table-empty-icon">👥</span>Клиенты не найдены</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data.map(c => `
+    <tr data-search="${c.name} ${c.phone} ${c.telegram}">
+      <td><input type="checkbox" class="table-checkbox row-check" data-id="${c.id}" onchange="toggleRow(${c.id},this)"></td>
+      <td>
+        <div class="client-name-cell">
+          <div class="avatar avatar-sm" style="background:${ZeaUtils.getAvatarColor(c.name)};font-size:11px;">${ZeaUtils.getInitials(c.name)}</div>
+          <div>
+            <div class="client-info-name">${c.name}</div>
+            <div class="client-info-phone">${c.phone}</div>
+          </div>
+        </div>
+      </td>
+      <td style="color:var(--text-muted); font-size:13px;">${c.telegram}</td>
+      <td><span style="font-weight:700; color:var(--text-primary);">${c.orders}</span></td>
+      <td>${c.debt > 0 ? `<span style="color:var(--danger-light); font-weight:700;">${c.debt.toLocaleString()} с</span>` : `<span style="color:var(--success-light); font-weight:600;">Нет долгов</span>`}</td>
+      <td>${c.status === 'active' ? '<span class="badge badge-success">Активен</span>' : '<span class="badge badge-neutral">Неактивен</span>'}</td>
+      <td style="color:var(--text-muted); font-size:12px;">${ZeaUtils.formatDate(c.joined)}</td>
+      <td>
+        <div class="table-actions">
+          <a href="detail.html?id=${c.id}" class="btn btn-ghost btn-icon-sm" title="Карточка">👁</a>
+          <button class="btn btn-ghost btn-icon-sm" title="Уведомить" onclick="notify(${c.id})">🔔</button>
+          <button class="btn btn-ghost btn-icon-sm" title="Удалить" onclick="deleteClient(${c.id},'${c.name}')">🗑</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+  document.getElementById('totalCount').textContent = data.length;
+  document.getElementById('paginationInfo').textContent = `Показано 1–${data.length} из ${data.length}`;
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('statusFilter').value;
+  const debt = document.getElementById('debtFilter').value;
+  filteredClients = clients.filter(c => {
+    const text = `${c.name} ${c.phone} ${c.telegram}`.toLowerCase();
+    if (q && !text.includes(q)) return false;
+    if (status && c.status !== status) return false;
+    if (debt === 'debtors' && c.debt <= 0) return false;
+    if (debt === 'clean' && c.debt > 0) return false;
+    return true;
+  });
+  renderTable(filteredClients);
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('statusFilter').value = '';
+  document.getElementById('debtFilter').value = '';
+  applyFilters();
+}
+
+function toggleSelectAll(cb) {
+  document.querySelectorAll('.row-check').forEach(c => {
+    c.checked = cb.checked;
+    const id = parseInt(c.dataset.id);
+    cb.checked ? selectedIds.add(id) : selectedIds.delete(id);
+  });
+  updateBulkBar();
+}
+
+function toggleRow(id, cb) {
+  cb.checked ? selectedIds.add(id) : selectedIds.delete(id);
+  updateBulkBar();
+}
+
+function updateBulkBar() {
+  const bar = document.getElementById('bulkBar');
+  const count = selectedIds.size;
+  bar.classList.toggle('visible', count > 0);
+  document.getElementById('bulkCount').textContent = `${count} выбрано`;
+}
+
+function clearSelection() {
+  selectedIds.clear();
+  document.querySelectorAll('.row-check, #selectAll').forEach(c => c.checked = false);
+  updateBulkBar();
+}
+
+function bulkNotify() { Toast.success('Уведомления отправлены', `${selectedIds.size} клиентам`); clearSelection(); }
+function bulkDelete() { Toast.warning('Подтвердите', 'Массовое удаление недоступно в демо'); clearSelection(); }
+
+function notify(id) {
+  const c = clients.find(x => x.id === id);
+  Toast.success('Уведомление отправлено', `Клиент: ${c.name}`);
+}
+
+function deleteClient(id, name) {
+  deleteTargetId = id;
+  document.getElementById('deleteClientName').textContent = name;
+  Modal.open('deleteModal');
+}
+
+function confirmDelete() {
+  clients = clients.filter(c => c.id !== deleteTargetId);
+  filteredClients = filteredClients.filter(c => c.id !== deleteTargetId);
+  renderTable(filteredClients);
+  Modal.close('deleteModal');
+  Toast.success('Клиент удалён', 'Данные обновлены');
+}
+
+function addClient() {
+  const first = document.getElementById('newFirstName').value.trim();
+  const last = document.getElementById('newLastName').value.trim();
+  const phone = document.getElementById('newPhone').value.trim();
+  if (!first || !last || !phone) { Toast.warning('Заполните обязательные поля'); return; }
+  const name = `${first} ${last}`;
+  const newClient = { id: Date.now(), name, phone, telegram: document.getElementById('newTelegram').value || '—', orders: 0, debt: 0, status: 'active', joined: new Date().toISOString().split('T')[0] };
+  clients.unshift(newClient);
+  filteredClients = [...clients];
+  renderTable(filteredClients);
+  Modal.close('addClientModal');
+  Toast.success('Клиент добавлен!', name);
+}
+
+function exportCSV() { Toast.info('Экспорт', 'CSV файл формируется…'); }
+
+// Search with debounce
+document.getElementById('searchInput').addEventListener('input', ZeaUtils.debounce(applyFilters, 250));
+
+renderTable(clients);
+</script>
+</body>
+</html>

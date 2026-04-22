@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Настройки Платформы — ZeaCargo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <style>
+    .settings-grid { display: grid; grid-template-columns: 260px 1fr; gap: 32px; }
+    .settings-nav { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 12px; height: fit-content; }
+    .settings-nav-item { padding: 12px 16px; border-radius: var(--radius-md); font-size: 14px; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all var(--transition-fast); margin-bottom: 4px; display: flex; align-items: center; gap: 12px; }
+    .settings-nav-item:hover { color: var(--text-primary); background: var(--bg-hover); }
+    .settings-nav-item.active { color: var(--primary-light); background: rgba(108,99,255,0.1); font-weight: 600; }
+    .settings-nav-icon { font-size: 18px; }
+    .settings-section { display: none; animation: fadeIn 0.3s ease; }
+    .settings-section.active { display: block; }
+    .section-title { font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle); }
+    .setting-group { margin-bottom: 32px; }
+    
+    .pricing-tier { background: var(--bg-elevated); border: 1px solid var(--border-default); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px; position: relative; }
+    .pricing-tier-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .pricing-name { font-size: 16px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+    .pricing-price { font-size: 18px; font-weight: 800; color: var(--primary-light); }
+    .pricing-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5; }
+    
+    @media (max-width: 900px) { .settings-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="bg-mesh">
+<aside class="sidebar" id="sidebar">
+  <a href="../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">👑</div>
+    <div class="sidebar-logo-text">
+      <div class="sidebar-logo-title">ZeaCargo</div>
+      <div class="sidebar-logo-sub">Суперадмин</div>
+    </div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section"><div class="sidebar-section-label">Платформа</div>
+      <a href="dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="companies.html" class="sidebar-link"><span class="sidebar-link-icon">🏢</span><span class="sidebar-link-text">Компании</span><span class="sidebar-link-badge">4</span></a>
+    </div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Управление</div>
+      <a href="settings.html" class="sidebar-link active"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+    </div>
+    <div class="sidebar-section"><div class="sidebar-section-label">Также</div>
+      <a href="../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="settings.html" class="sidebar-user">
+      <div class="sidebar-user-avatar" style="background:linear-gradient(135deg,#F59E0B,#D97706);">СА</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Суперадмин</div><div class="sidebar-user-role">Платформа ZeaCargo</div></div>
+    </a>
+  </div>
+</aside>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb">
+      <a href="dashboard.html" style="color:var(--text-muted);text-decoration:none;">Суперадмин</a>
+      <span style="color:var(--text-muted);">/</span>
+      <span>Настройки платформы</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+
+      <div class="page-header animate-fade-up">
+        <div>
+          <h1>Настройки Платформы</h1>
+          <p>Глобальные параметры системы и тарифы</p>
+        </div>
+      </div>
+
+      <div class="settings-grid animate-fade-up delay-100">
+        <!-- Vertical Nav -->
+        <div class="settings-nav">
+          <div class="settings-nav-item active" onclick="switchTab('pricing', this)">
+            <span class="settings-nav-icon">💰</span> Тарифы подписки
+          </div>
+          <div class="settings-nav-item" onclick="switchTab('global', this)">
+            <span class="settings-nav-icon">🌍</span> Базовые настройки
+          </div>
+          <div class="settings-nav-item" onclick="switchTab('admins', this)">
+            <span class="settings-nav-icon">👥</span> Администраторы
+          </div>
+          <div class="settings-nav-item" onclick="switchTab('system', this)">
+            <span class="settings-nav-icon">🛠</span> Системные логи
+          </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="card" style="align-self: start; min-height: 500px;">
+          
+          <!-- PRICING TAB -->
+          <div id="tab-pricing" class="settings-section active">
+            <div class="section-title">Тарифы для карго-компаний</div>
+            <p class="text-sm text-muted mb-4">Настройте стоимость и лимиты для SaaS-клиентов. Эти тарифы будут отображаться на главном лендинге.</p>
+            
+            <div class="pricing-tier">
+              <div class="pricing-tier-header">
+                <div class="pricing-name"><span class="badge badge-info">Старт</span></div>
+                <div class="pricing-price">$99 / месяц</div>
+              </div>
+              <div class="pricing-desc">Для небольших компаний. До 500 клиентов, 2 оператора, базовый Telegram-бот (1000 запросов/день).</div>
+              <button class="btn btn-secondary btn-sm" onclick="openTariffModal('Старт', 99)">✏️ Редактировать тариф</button>
+            </div>
+
+            <div class="pricing-tier" style="border-color: rgba(108,99,255,0.4); box-shadow: inset 0 0 0 1px rgba(108,99,255,0.2);">
+              <div class="pricing-tier-header">
+                <div class="pricing-name"><span class="badge badge-purple">Бизнес</span> <span class="badge badge-success" style="font-size:10px;">Популярный</span></div>
+                <div class="pricing-price">$199 / месяц</div>
+              </div>
+              <div class="pricing-desc">Для активного роста. До 5000 клиентов, 5 операторов, расширенный бот с рассылками, каталог товаров.</div>
+              <button class="btn btn-secondary btn-sm" onclick="openTariffModal('Бизнес', 199)">✏️ Редактировать тариф</button>
+            </div>
+
+            <div class="pricing-tier">
+              <div class="pricing-tier-header">
+                <div class="pricing-name"><span class="badge badge-warning">Корпоративный</span></div>
+                <div class="pricing-price">$399 / месяц</div>
+              </div>
+              <div class="pricing-desc">Без ограничений. Нелимитированные клиенты и операторы, белый Telegram-бот без вотермарок платформы.</div>
+              <button class="btn btn-secondary btn-sm" onclick="openTariffModal('Корпоративный', 399)">✏️ Редактировать тариф</button>
+            </div>
+            
+            <button class="btn btn-primary mt-4" onclick="openTariffModal('', 0)">+ Добавить новый тариф</button>
+          </div>
+
+          <!-- GLOBAL TAB -->
+          <div id="tab-global" class="settings-section">
+            <div class="section-title">Базовые настройки</div>
+            <div class="setting-group">
+              <div class="form-group">
+                <label class="form-label">Название платформы</label>
+                <input type="text" class="form-control" value="ZeaCargo Platform">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Контактный Email поддержки</label>
+                <input type="email" class="form-control" value="support@zeacargo.com">
+              </div>
+              <div class="form-group mt-4">
+                <div class="toggle-wrapper">
+                  <div class="toggle active" id="t1" onclick="this.classList.toggle('active')"></div>
+                  <span class="toggle-label">Режим обслуживания (отключит логин для всех кроме суперадминов)</span>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="Toast.success('Настройки сохранены')">Сохранить</button>
+          </div>
+
+          <!-- ADMINS TAB -->
+          <div id="tab-admins" class="settings-section">
+            <div class="section-title">Администраторы платформы</div>
+            <p class="text-sm text-muted mb-4">Пользователи с полным доступом ко всем карго-компаниям.</p>
+            <div class="table-container mb-4">
+              <table>
+                <thead><tr><th>Имя</th><th>Email</th><th>Роль</th><th></th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Суперадмин</td>
+                    <td>superadmin@zeacargo.com</td>
+                    <td><span class="badge badge-warning">Создатель</span></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>Тех. Поддержка</td>
+                    <td>support@zeacargo.com</td>
+                    <td><span class="badge badge-info">Модератор</span></td>
+                    <td><button class="btn btn-ghost btn-sm">🗑</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <button class="btn btn-secondary btn-sm">+ Пригласить администратора</button>
+          </div>
+
+          <!-- LOGS TAB -->
+          <div id="tab-system" class="settings-section">
+            <div class="section-title">Системные логи</div>
+            <p class="text-sm text-muted mb-4">Последние действия глобальных администраторов.</p>
+            <div class="table-container">
+              <table>
+                <thead><tr><th>Дата</th><th>Действие</th><th>Пользователь</th><th>IP-адрес</th></tr></thead>
+                <tbody>
+                  <tr><td class="text-xs text-muted">20 Апр 2025, 14:02</td><td class="text-sm">Изменены реквизиты оплаты тарифа</td><td class="text-sm">Суперадмин</td><td class="text-xs text-muted">192.168.1.1</td></tr>
+                  <tr><td class="text-xs text-muted">19 Апр 2025, 09:12</td><td class="text-sm">Создана новая компания "RusCargo KZ"</td><td class="text-sm">Суперадмин</td><td class="text-xs text-muted">192.168.1.1</td></tr>
+                  <tr><td class="text-xs text-muted">18 Апр 2025, 17:45</td><td class="text-sm">Вход в систему</td><td class="text-sm">Тех. Поддержка</td><td class="text-xs text-muted">84.120.44.12</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- EDIT TARIFF MODAL -->
+<div class="modal-overlay" id="tariffModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="tariffModalTitle">Редактировать тариф</div>
+      <button class="modal-close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fg2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label class="form-label">Название тарифа <span class="required">*</span></label>
+          <input type="text" class="form-control" id="tName" placeholder="Бизнес Макс">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Стоимость ($ / месяц) <span class="required">*</span></label>
+          <input type="number" class="form-control" id="tPrice" placeholder="199">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Лимит клиентов</label>
+          <input type="number" class="form-control" id="tClients" placeholder="5000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Лимит операторов</label>
+          <input type="number" class="form-control" id="tOperators" placeholder="5">
+        </div>
+      </div>
+      <div class="form-group" style="margin-top: 16px;">
+        <label class="form-label">Описание тарифа</label>
+        <textarea class="form-control" id="tDesc" rows="3" placeholder="Краткое описание функций..."></textarea>
+      </div>
+      <div class="form-section-h" style="font-size: 11px; font-weight: 700; color: var(--text-disabled); text-transform: uppercase; letter-spacing: .1em; margin: 20px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle);">Доп. функции</div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer; color:var(--text-secondary);">
+          <input type="checkbox" id="tCatalog" style="width:16px; height:16px; accent-color:var(--primary);"> Доступ к Каталогу товаров
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer; color:var(--text-secondary);">
+          <input type="checkbox" id="tWhitebot" style="width:16px; height:16px; accent-color:var(--primary);"> Telegram-бот без вотермарки ZeaCargo
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer; color:var(--text-secondary);">
+          <input type="checkbox" id="tApi" style="width:16px; height:16px; accent-color:var(--primary);"> Доступ к API
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="saveTariff()">💾 Сохранить тариф</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../assets/js/app.js"></script>
+<script>
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.settings-nav-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.settings-section').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
+function openTariffModal(name, price) {
+  document.getElementById('tariffModalTitle').textContent = name ? 'Редактировать тариф: ' + name : 'Новый тариф';
+  document.getElementById('tName').value = name;
+  document.getElementById('tPrice').value = price || '';
+  document.getElementById('tClients').value = name === 'Старт' ? 500 : (name === 'Бизнес' ? 5000 : '');
+  document.getElementById('tOperators').value = name === 'Старт' ? 2 : (name === 'Бизнес' ? 5 : '');
+  document.getElementById('tDesc').value = '';
+  document.getElementById('tCatalog').checked = name !== 'Старт';
+  document.getElementById('tWhitebot').checked = name === 'Корпоративный';
+  document.getElementById('tApi').checked = name === 'Корпоративный';
+  
+  Modal.open('tariffModal');
+}
+
+function saveTariff() {
+  const name = document.getElementById('tName').value.trim();
+  if (!name) {
+    Toast.warning('Укажите название тарифа');
+    return;
+  }
+  Modal.close('tariffModal');
+  Toast.success('Тариф сохранён', name);
+}
+</script>
+</body>
+</html>

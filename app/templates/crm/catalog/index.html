@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог товаров — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:20px; }
+    .product-card { background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-xl); overflow:hidden; transition:all .3s; }
+    .product-card:hover { border-color:var(--border-strong); transform:translateY(-4px); box-shadow:0 16px 48px rgba(0,0,0,.4); }
+    .product-image { height:180px; background:var(--bg-elevated); display:flex; align-items:center; justify-content:center; font-size:56px; position:relative; }
+    .product-badge { position:absolute; top:10px; right:10px; }
+    .product-body { padding:16px; }
+    .product-name { font-size:15px; font-weight:700; color:var(--text-primary); margin-bottom:4px; }
+    .product-shop { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+    .product-price { font-size:20px; font-weight:800; color:var(--primary-light); margin-bottom:12px; }
+    .product-footer { display:flex; gap:8px; }
+    .view-toggle { display:flex; gap:4px; background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:8px; padding:3px; }
+    .view-btn { width:32px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:6px; cursor:pointer; font-size:14px; color:var(--text-muted); transition:all .15s; }
+    .view-btn.active { background:var(--bg-card); color:var(--text-primary); box-shadow:var(--shadow-sm); }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb"><a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a><span style="color:var(--text-muted);">/</span><span>Каталог</span></div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button>
+    <button class="btn btn-primary btn-sm" data-modal-open="addProductModal">+ Добавить товар</button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+      <div class="page-header animate-fade-up">
+        <div><h1>Каталог товаров</h1><p>Публичный магазин и витрина для клиентов</p></div>
+        <div class="page-header-actions">
+          <div class="view-toggle">
+            <div class="view-btn active" id="gridViewBtn" onclick="setView('grid',this)" title="Сетка">⊞</div>
+            <div class="view-btn" id="listViewBtn" onclick="setView('list',this)" title="Список">≡</div>
+          </div>
+          <button class="btn btn-secondary btn-sm">🔗 Открыть витрину</button>
+          <button class="btn btn-primary" data-modal-open="addProductModal">+ Добавить товар</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar animate-fade-up delay-100">
+        <div class="search-bar" style="flex:1;min-width:200px;"><span class="search-icon">🔍</span><input type="text" class="form-control" id="searchInput" placeholder="Поиск по названию, категории…"></div>
+        <select class="form-control" style="width:160px;" id="catFilter" onchange="applyFilter()">
+          <option value="">Все категории</option>
+          <option value="Одежда">Одежда</option>
+          <option value="Обувь">Обувь</option>
+          <option value="Электроника">Электроника</option>
+          <option value="Детские">Детские</option>
+          <option value="Дом">Для дома</option>
+        </select>
+        <select class="form-control" style="width:140px;" id="statusFilter" onchange="applyFilter()">
+          <option value="">Все статусы</option>
+          <option value="active">Активные</option>
+          <option value="hidden">Скрытые</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="clearFilter()">✕</button>
+      </div>
+
+      <!-- Grid -->
+      <div class="product-grid animate-fade-up delay-200" id="productGrid"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ADD PRODUCT MODAL -->
+<div class="modal-overlay" id="addProductModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Добавить товар</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Название <span class="required">*</span></label><input type="text" class="form-control" id="pName" placeholder="Кроссовки Nike Air Max"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="form-group"><label class="form-label">Категория</label>
+          <select class="form-control" id="pCat"><option>Одежда</option><option>Обувь</option><option>Электроника</option><option>Детские</option><option>Для дома</option></select></div>
+        <div class="form-group"><label class="form-label">Магазин</label><input type="text" class="form-control" id="pShop" placeholder="Taobao, 1688…"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="form-group"><label class="form-label">Цена (сом) <span class="required">*</span></label><input type="number" class="form-control" id="pPrice" placeholder="2 990"></div>
+        <div class="form-group"><label class="form-label">Цена CNY</label><input type="number" class="form-control" id="pCNY" placeholder="180"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Описание</label><textarea class="form-control" id="pDesc" rows="2" placeholder="Краткое описание товара…"></textarea></div>
+      <div class="form-group" style="margin-bottom:0;"><label class="form-label">Статус</label>
+        <select class="form-control" id="pStatus"><option value="active">Активен (виден клиентам)</option><option value="hidden">Скрыт</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="addProduct()">Добавить</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><div class="modal-title">Удалить товар?</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body"><p>Это действие нельзя отменить. Товар будет удалён из каталога.</p></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Удалить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+let products = JSON.parse(JSON.stringify(ZeaData.products));
+let deleteId = null;
+let currentView = 'grid';
+
+const icons = { 'Одежда':'👔','Обувь':'👟','Электроника':'📱','Детские':'🧸','Для дома':'🏠','Аксессуары':'👜' };
+
+function renderGrid(data) {
+  const grid = document.getElementById('productGrid');
+  if (!data.length) { grid.innerHTML = `<div style="grid-column:1/-1;"><div class="table-empty"><span class="table-empty-icon">🛍️</span>Товары не найдены</div></div>`; return; }
+  grid.innerHTML = data.map(p => `
+    <div class="product-card">
+      <div class="product-image">
+        ${icons[p.category] || '📦'}
+        <div class="product-badge"><span class="badge ${p.status==='active'?'badge-success':'badge-neutral'}">${p.status==='active'?'Активен':'Скрыт'}</span></div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">${p.name}</div>
+        <div class="product-shop">${p.shop} · ${p.category}</div>
+        <div class="product-price">${p.price.toLocaleString()} с</div>
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px;">¥${p.priceCny || '—'} · ${p.requests} заявок</div>
+        <div class="product-footer">
+          <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="editProduct(${p.id})">✏️ Ред.</button>
+          <button class="btn ${p.status==='active'?'btn-ghost':'btn-primary'} btn-sm" onclick="toggleStatus(${p.id})">${p.status==='active'?'🙈':'👁'}</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">🗑</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function applyFilter() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const cat = document.getElementById('catFilter').value;
+  const status = document.getElementById('statusFilter').value;
+  const filtered = products.filter(p => {
+    if (q && !`${p.name} ${p.category} ${p.shop}`.toLowerCase().includes(q)) return false;
+    if (cat && p.category !== cat) return false;
+    if (status && p.status !== status) return false;
+    return true;
+  });
+  renderGrid(filtered);
+}
+
+function clearFilter() {
+  ['searchInput','catFilter','statusFilter'].forEach(id => document.getElementById(id).value = '');
+  applyFilter();
+}
+
+function setView(view, btn) {
+  currentView = view;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function toggleStatus(id) {
+  const p = products.find(x => x.id === id);
+  if (p) { p.status = p.status === 'active' ? 'hidden' : 'active'; }
+  applyFilter();
+  Toast.info(p.status === 'active' ? 'Товар показан' : 'Товар скрыт');
+}
+
+function editProduct(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('pName').value = p.name;
+  document.getElementById('pPrice').value = p.price;
+  document.getElementById('pCNY').value = p.priceCny || '';
+  Modal.open('addProductModal');
+}
+
+function deleteProduct(id) { deleteId = id; Modal.open('deleteModal'); }
+function confirmDelete() {
+  products = products.filter(p => p.id !== deleteId);
+  applyFilter();
+  Modal.close('deleteModal');
+  Toast.success('Товар удалён');
+}
+
+function addProduct() {
+  const name = document.getElementById('pName').value.trim();
+  const price = parseInt(document.getElementById('pPrice').value);
+  if (!name || !price) { Toast.warning('Заполните обязательные поля'); return; }
+  products.unshift({ id:Date.now(), name, category:document.getElementById('pCat').value, shop:document.getElementById('pShop').value||'—', price, priceCny:document.getElementById('pCNY').value||0, requests:0, status:document.getElementById('pStatus').value });
+  applyFilter();
+  Modal.close('addProductModal');
+  Toast.success('Товар добавлен!', name);
+}
+
+document.getElementById('searchInput').addEventListener('input', ZeaUtils.debounce(applyFilter, 250));
+renderGrid(products);
+</script>
+</body>
+</html>

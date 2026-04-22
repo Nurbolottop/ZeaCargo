@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дашборд — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-bottom: 28px; }
+    .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 28px; }
+    .bottom-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
+    .chart-wrap { height: 260px; position: relative; }
+    .quick-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .order-row td:first-child { font-family: monospace; font-size: 12px; color: var(--text-muted); }
+
+    .notification-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 0; border-bottom: 1px solid var(--border-subtle);
+    }
+    .notification-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .notif-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+    .notif-text { flex:1; }
+    .notif-title { font-size:13px; font-weight:600; color:var(--text-primary); }
+    .notif-sub   { font-size:12px; color:var(--text-muted); margin-top:2px; }
+    .notif-time  { font-size:11px; color:var(--text-disabled); white-space:nowrap; }
+
+    .debtor-item {
+      display:flex; align-items:center; gap:12px;
+      padding: 12px 0; border-bottom: 1px solid var(--border-subtle);
+    }
+    .debtor-item:last-child { border-bottom:none; padding-bottom:0; }
+    .debtor-info { flex:1; }
+    .debtor-name { font-size:13px; font-weight:600; color:var(--text-primary); }
+    .debtor-orders { font-size:12px; color:var(--text-muted); }
+    .debtor-amount { font-size:14px; font-weight:700; color:var(--danger-light); white-space:nowrap; }
+
+    @media(max-width:1200px){ .stats-grid{grid-template-columns:repeat(2,1fr);} .charts-grid,.bottom-grid{grid-template-columns:1fr;} }
+    @media(max-width:640px){ .stats-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <a href="../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../crm/dashboard.html" class="sidebar-link active"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div>
+      <div class="topbar-title">Дашборд</div>
+      <div class="topbar-breadcrumb">RusCargo KZ</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn" onclick="Toast.info('Нет новых уведомлений')">
+      🔔
+      <span class="topbar-notification-dot"></span>
+    </button>
+    <button class="topbar-btn" onclick="window.location='settings/index.html'">⚙️</button>
+    <a href="../auth/login.html" class="btn btn-ghost btn-sm">Выйти</a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content stagger-children">
+
+      <!-- Page Header -->
+      <div class="page-header animate-fade-up">
+        <div class="page-header-left">
+          <h1>Дашборд</h1>
+          <p>Воскресенье, 20 апреля 2025 — RusCargo KZ</p>
+        </div>
+        <div class="page-header-actions">
+          <div class="quick-actions">
+            <a href="clients/index.html" class="btn btn-secondary btn-sm">+ Клиент</a>
+            <a href="orders/create.html" class="btn btn-primary btn-sm">+ Заказ</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="stats-grid animate-fade-up delay-100">
+        <div class="stat-card" style="--stat-accent:#6C63FF; --stat-accent-bg:rgba(108,99,255,0.12);">
+          <div class="stat-icon">👥</div>
+          <div class="stat-content">
+            <div class="stat-value" data-counter="248">248</div>
+            <div class="stat-label">Всего клиентов</div>
+            <div class="stat-trend up">↑ +12 за месяц</div>
+          </div>
+        </div>
+        <div class="stat-card" style="--stat-accent:#F59E0B; --stat-accent-bg:rgba(245,158,11,0.12);">
+          <div class="stat-icon">🚚</div>
+          <div class="stat-content">
+            <div class="stat-value" data-counter="184">184</div>
+            <div class="stat-label">Заказов в пути</div>
+            <div class="stat-trend up">↑ +8 сегодня</div>
+          </div>
+        </div>
+        <div class="stat-card" style="--stat-accent:#10B981; --stat-accent-bg:rgba(16,185,129,0.12);">
+          <div class="stat-icon">✅</div>
+          <div class="stat-content">
+            <div class="stat-value" data-counter="42">42</div>
+            <div class="stat-label">Готовы к выдаче</div>
+            <div class="stat-trend down">↓ -3 выдано</div>
+          </div>
+        </div>
+        <div class="stat-card" style="--stat-accent:#EF4444; --stat-accent-bg:rgba(239,68,68,0.12);">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-content">
+            <div class="stat-value">892К</div>
+            <div class="stat-label">Общий долг (сом)</div>
+            <div class="stat-trend down">↓ -45К сегодня</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid animate-fade-up delay-200">
+        <!-- Orders Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Заказы за месяц</div>
+              <div class="card-subtitle">Ноябрь 2024</div>
+            </div>
+            <div class="tabs" style="background:var(--bg-elevated); padding:3px; border-radius:8px; border:1px solid var(--border-subtle);">
+              <button class="tab-btn active" style="padding:5px 12px; font-size:12px; border-radius:6px;" onclick="switchChartPeriod('week',this)">Нед</button>
+              <button class="tab-btn" style="padding:5px 12px; font-size:12px; border-radius:6px;" onclick="switchChartPeriod('month',this)">Мес</button>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="ordersChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Donut Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Статусы заказов</div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="statusChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Grid -->
+      <div class="bottom-grid animate-fade-up delay-300">
+        <!-- Recent Orders -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Последние заказы</div>
+            <a href="orders/index.html" class="btn btn-ghost btn-sm">Все заказы →</a>
+      <a href="groups/index.html" class="sidebar-link" id="nav-groups">
+        <span class="sidebar-link-icon">📁</span>
+        <span class="sidebar-link-text">Группы</span>
+      </a>
+          </div>
+          <div class="table-container" style="border:none; border-radius:0;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Трек</th>
+                  <th>Клиент</th>
+                  <th>Вес</th>
+                  <th>Статус</th>
+                  <th>Оплата</th>
+                </tr>
+              </thead>
+              <tbody id="recentOrdersTable">
+                <tr>
+                  <td>CN2024110001</td>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar avatar-sm" style="background:linear-gradient(135deg,#6C63FF,#5248CC);font-size:11px;">НА</div>Нурбек А.</div></td>
+                  <td>1.2 кг</td>
+                  <td><span class="badge badge-warning">В пути</span></td>
+                  <td><span class="badge badge-danger">Штраф</span></td>
+                </tr>
+                <tr>
+                  <td>CN2024110002</td>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar avatar-sm" style="background:linear-gradient(135deg,#10B981,#059669);font-size:11px;">АБ</div>Айгуль Б.</div></td>
+                  <td>0.5 кг</td>
+                  <td><span class="badge badge-success">Готов</span></td>
+                  <td><span class="badge badge-success">Оплачен</span></td>
+                </tr>
+                <tr>
+                  <td>CN2024110003</td>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar avatar-sm" style="background:linear-gradient(135deg,#F59E0B,#D97706);font-size:11px;">ДС</div>Дамир С.</div></td>
+                  <td>3.0 кг</td>
+                  <td><span class="badge badge-info">Склад</span></td>
+                  <td><span class="badge badge-warning">Частично</span></td>
+                </tr>
+                <tr>
+                  <td>CN2024110004</td>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar avatar-sm" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);font-size:11px;">ЗО</div>Зарина О.</div></td>
+                  <td>0.3 кг</td>
+                  <td><span class="badge badge-orange">Сортировка</span></td>
+                  <td><span class="badge badge-danger">Штраф</span></td>
+                </tr>
+                <tr>
+                  <td>CN2024110005</td>
+                  <td><div style="display:flex;align-items:center;gap:8px;"><div class="avatar avatar-sm" style="background:linear-gradient(135deg,#EC4899,#DB2777);font-size:11px;">СТ</div>Санжар Т.</div></td>
+                  <td>8.5 кг</td>
+                  <td><span class="badge badge-teal">Прибыл</span></td>
+                  <td><span class="badge badge-danger">Штраф</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <!-- Top Debtors -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Топ должников</div>
+              <a href="finance/fines.html" class="btn btn-ghost btn-sm">Все →</a>
+            </div>
+            <div id="debtorsList">
+              <div class="debtor-item">
+                <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#EC4899,#DB2777);">СТ</div>
+                <div class="debtor-info">
+                  <div class="debtor-name">Санжар Токтоматов</div>
+                  <div class="debtor-orders">8 заказов с долгом</div>
+                </div>
+                <div class="debtor-amount">12 300 с</div>
+              </div>
+              <div class="debtor-item">
+                <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#F59E0B,#D97706);">ДС</div>
+                <div class="debtor-info">
+                  <div class="debtor-name">Дамир Садыков</div>
+                  <div class="debtor-orders">5 заказов с долгом</div>
+                </div>
+                <div class="debtor-amount">7 800 с</div>
+              </div>
+              <div class="debtor-item">
+                <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);">МК</div>
+                <div class="debtor-info">
+                  <div class="debtor-name">Мадина Карибаева</div>
+                  <div class="debtor-orders">3 заказа с долгом</div>
+                </div>
+                <div class="debtor-amount">4 200 с</div>
+              </div>
+              <div class="debtor-item">
+                <div class="avatar avatar-sm" style="background:linear-gradient(135deg,#6C63FF,#5248CC);">НА</div>
+                <div class="debtor-info">
+                  <div class="debtor-name">Нурбек Асанов</div>
+                  <div class="debtor-orders">2 заказа с долгом</div>
+                </div>
+                <div class="debtor-amount">3 200 с</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Notifications -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Уведомления</div>
+              <a href="notifications/index.html" class="btn btn-ghost btn-sm">Все →</a>
+            </div>
+            <div>
+              <div class="notification-item">
+                <div class="notif-icon" style="background:var(--success-bg);">✅</div>
+                <div class="notif-text">
+                  <div class="notif-title">Айгуль Бекова — оплатила 400 с</div>
+                  <div class="notif-sub">Заказ CN2024110002 закрыт</div>
+                </div>
+                <div class="notif-time">2 мин</div>
+              </div>
+              <div class="notification-item">
+                <div class="notif-icon" style="background:var(--info-bg);">📦</div>
+                <div class="notif-text">
+                  <div class="notif-title">Новый заказ CN2024110008</div>
+                  <div class="notif-sub">Бекзод Рахимов — Детские игрушки</div>
+                </div>
+                <div class="notif-time">15 мин</div>
+              </div>
+              <div class="notification-item">
+                <div class="notif-icon" style="background:var(--warning-bg);">⚠️</div>
+                <div class="notif-text">
+                  <div class="notif-title">Напоминание о долге</div>
+                  <div class="notif-sub">Санжар Токтоматов — 12 300 с</div>
+                </div>
+                <div class="notif-time">1 ч</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+
+<script src="../assets/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Orders line chart
+  ZeaCharts.createLine('ordersChart',
+    ['1 нояб','5','10','15','20','25','30 нояб'],
+    [{
+      label: 'Новые заказы',
+      data: [12, 19, 15, 28, 24, 32, 18],
+      borderColor: '#6C63FF',
+      backgroundColor: 'rgba(108,99,255,0.08)',
+    },{
+      label: 'Выданы',
+      data: [8, 14, 11, 20, 18, 25, 14],
+      borderColor: '#10B981',
+      backgroundColor: 'rgba(16,185,129,0.06)',
+    }]
+  );
+
+  // Status donut chart
+  ZeaCharts.createDonut('statusChart',
+    ['В пути','На складе','Готовы','Выданы','Прочие'],
+    [184, 45, 42, 128, 18],
+    ['#6C63FF','#3B82F6','#10B981','#F59E0B','#64748B']
+  );
+
+  // Animate counters
+  setTimeout(() => initCounters(), 100);
+});
+
+function switchChartPeriod(period, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  Toast.info('График обновлён', period === 'week' ? 'Показана неделя' : 'Показан месяц');
+}
+</script>
+</body>
+</html>

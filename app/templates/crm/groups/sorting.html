@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сортировка — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .sort-container { max-width: 800px; margin: 40px auto; }
+    .sort-box { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-xl); }
+    .sort-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; color: var(--text-primary); }
+    .sort-desc { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+    .search-input-group { display: flex; gap: 12px; align-items: center; background: rgba(0,0,0,0.2); padding: 8px; border-radius: var(--radius-lg); border: 1px solid var(--border-default); }
+    .search-input-group:focus-within { border-color: var(--primary); }
+    .track-input { background: transparent; border: none; color: #fff; font-family: monospace; font-size: 18px; flex: 1; padding: 8px 12px; outline: none; }
+    .count-badge { background: #1E293B; color: var(--text-muted); padding: 8px 16px; border-radius: var(--radius-md); font-weight: 700; }
+    .result-card { margin-top: 24px; display: none; animation: slideInUp 0.3s ease-out; }
+    .result-content { display: flex; align-items: center; gap: 16px; padding: 20px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); border-radius: var(--radius-lg); }
+    .btn-find { background: #EAB308; color: #000; font-weight: 700; border: none; padding: 10px 24px; }
+    .btn-find:hover { background: #FACC15; }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-breadcrumb">
+      <span>Сортировка — group-188</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div style="display:flex; gap:12px; align-items:center;">
+       <div style="font-size:12px; color:var(--text-muted);">Филиал: <strong>Все филиалы</strong></div>
+       <div style="font-size:12px; color:var(--text-muted);">Пользователь: <strong>admin</strong> · Директор</div>
+       <button class="btn btn-secondary btn-sm">Уведомления</button>
+       <button class="btn btn-ghost btn-sm">🌙 Темная тема</button>
+       <button class="btn btn-danger btn-sm" style="background:#C53030;">Выход</button>
+    </div>
+  </div>
+</header>
+
+<div class="app-layout" style="margin-left:0; width:100%;">
+  <div class="main-content">
+    <div class="sort-container">
+      <div class="sort-box animate-fade-up">
+        <h1 class="sort-title">Сортировка</h1>
+        <p class="sort-desc">Сканируйте/вставьте трек и нажмите Enter. Поиск выполняется только в этой группе.</p>
+        
+        <div class="search-input-group">
+          <input type="text" class="track-input" id="trackInput" placeholder="Трек" autofocus onkeypress="if(event.key==='Enter') findTrack()">
+          <div class="count-badge">123</div>
+          <button class="btn btn-find" onclick="findTrack()">Найти</button>
+          <button class="btn btn-secondary" onclick="addToGroup()">Добавить в группу</button>
+          <button class="btn btn-ghost" onclick="history.back()">Назад</button>
+        </div>
+
+        <div class="result-card" id="resultCard">
+          <div class="result-content">
+            <div style="font-size:32px;">✅</div>
+            <div>
+              <div style="font-weight:700; font-size:18px; color:var(--success-light);">Посылка отсортирована!</div>
+              <div style="font-size:14px; color:var(--text-muted);" id="resultText">Трек: CN2024... · Клиент: Нурбек Асанов</div>
+              <div style="margin-top:4px;"><span class="badge badge-success">Готов к выдаче</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+function findTrack() {
+  const q = document.getElementById('trackInput').value.trim();
+  if(!q) return;
+  
+  // Simulation
+  document.getElementById('resultText').textContent = `Трек: ${q} · Клиент: Тестовый Клиент`;
+  document.getElementById('resultCard').style.display = 'block';
+  Toast.success('Отсортировано', q);
+  document.getElementById('trackInput').value = '';
+  document.getElementById('trackInput').focus();
+}
+
+function addToGroup() {
+  Toast.info('Функция добавления в группу');
+}
+</script>
+</body>
+</html>

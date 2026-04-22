@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заказы — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .status-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+    .status-tab { padding:6px 14px; border-radius:var(--radius-full); font-size:12px; font-weight:600; cursor:pointer; border:1px solid var(--border-subtle); background:var(--bg-elevated); color:var(--text-muted); transition:all .2s; }
+    .status-tab:hover { color:var(--text-primary); }
+    .status-tab.active { background:rgba(108,99,255,0.15); border-color:var(--primary); color:var(--primary-light); }
+    .bulk-bar { background:var(--bg-elevated); border:1px solid var(--border-default); border-radius:var(--radius-lg); padding:12px 20px; display:none; align-items:center; gap:16px; margin-bottom:16px; }
+    .bulk-bar.visible { display:flex; }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link active"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb">
+      <a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a>
+      <span style="color:var(--text-muted);">/</span><span>Заказы</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button>
+    <a href="create.html" class="btn btn-primary btn-sm">+ Добавить заказ</a>
+  </div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+
+      <div class="page-header animate-fade-up">
+        <div>
+          <h1>Заказы</h1>
+          <p>Всего <strong id="totalCount">8</strong> заказов</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-secondary btn-sm">📥 Экспорт</button>
+          <a href="create.html" class="btn btn-primary">+ Добавить заказ</a>
+        </div>
+      </div>
+
+      <!-- Status Tabs -->
+      <div class="status-tabs animate-fade-up delay-100" id="statusTabs">
+        <div class="status-tab active" data-status="all" onclick="filterByStatus('all',this)">Все заказы <strong id="cnt-all">8</strong></div>
+        <div class="status-tab" data-status="in_transit" onclick="filterByStatus('in_transit',this)">🚚 В пути</div>
+        <div class="status-tab" data-status="arrived" onclick="filterByStatus('arrived',this)">🇰🇬 В Кыргызстане</div>
+        <div class="status-tab" data-status="ready" onclick="filterByStatus('ready',this)">✅ Готов к выдаче</div>
+        <div class="status-tab" data-status="issued" onclick="filterByStatus('issued',this)">🎁 Выдано</div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar animate-fade-up delay-100">
+        <div class="search-bar" style="flex:1;min-width:200px;">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="form-control" id="searchInput" placeholder="Поиск по треку, клиенту, описанию…">
+        </div>
+        <select class="form-control" style="width:160px;" id="payFilter" onchange="applyFilters()">
+          <option value="">Все оплаты</option>
+          <option value="unpaid">Не оплачен</option>
+          <option value="partial">Частично</option>
+          <option value="paid">Оплачен</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕</button>
+      </div>
+
+      <!-- Bulk Bar -->
+      <div class="bulk-bar" id="bulkBar">
+        <span style="font-size:14px;font-weight:600;color:var(--primary-light);" id="bulkCount">0 выбрано</span>
+        <select class="form-control" style="width:200px;" id="bulkStatus">
+          <option value="">Изменить статус…</option>
+          <option value="in_transit">В пути</option>
+          <option value="arrived">В Кыргызстане</option>
+          <option value="ready">Готов к выдаче</option>
+          <option value="issued">Выдано</option>
+        </select>
+        <button class="btn btn-primary btn-sm" onclick="bulkUpdateStatus()">Применить</button>
+        <button class="btn btn-ghost btn-sm" onclick="clearSelection()">✕</button>
+      </div>
+
+      <!-- Table -->
+      <div class="card animate-fade-up delay-200" style="padding:0;">
+        <div class="table-container" style="border:none;">
+          <table>
+            <thead>
+              <tr>
+                <th width="40"><input type="checkbox" class="table-checkbox" id="selectAll" onchange="toggleSelectAll(this)"></th>
+                <th>Трек-номер</th>
+                <th>Клиент</th>
+                <th>Вес</th>
+                <th>Сумма</th>
+                <th>Доставка</th>
+                <th>Оплата</th>
+                <th>Дата</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTable"></tbody>
+          </table>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-top:1px solid var(--border-subtle);">
+          <div style="font-size:13px;color:var(--text-muted);" id="paginationInfo">Показано 1–8 из 8</div>
+          <div class="pagination">
+            <button class="page-btn" disabled>←</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">→</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- STATUS CHANGE MODAL -->
+<div class="modal-overlay" id="statusModal">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <div class="modal-title">Изменить статус</div>
+      <button class="modal-close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Заказ: <strong id="statusModalTrack"></strong></div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Новый статус доставки</label>
+        <select class="form-control" id="newStatus">
+          <option value="warehouse_expected">Ожидается на складе</option>
+          <option value="warehouse">Принят на складе</option>
+          <option value="prepared">Подготовлен к отправке</option>
+          <option value="in_transit">В пути</option>
+          <option value="arrived">Прибыл в страну</option>
+          <option value="sorting">На сортировке</option>
+          <option value="ready">Готов к выдаче</option>
+          <option value="issued">Выдан клиенту</option>
+          <option value="problem">Проблема / Возврат</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="applyStatusChange()">Изменить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+let orders = JSON.parse(JSON.stringify(ZeaData.orders));
+let filtered = [...orders];
+let selectedIds = new Set();
+let statusModalTarget = null;
+let currentStatusFilter = 'all';
+
+const deliveryLabels = {
+  warehouse_expected: { label:'Ожидается', color:'neutral' },
+  warehouse: { label:'На складе', color:'info' },
+  prepared: { label:'Подготовлен', color:'purple' },
+  in_transit: { label:'В пути', color:'warning' },
+  arrived: { label:'Прибыл', color:'teal' },
+  sorting: { label:'Сортировка', color:'orange' },
+  ready: { label:'Готов', color:'success' },
+  issued: { label:'Выдан', color:'success' },
+  problem: { label:'Проблема', color:'danger' },
+};
+const payLabels = { unpaid:{label:'Штраф',color:'danger'}, partial:{label:'Частично',color:'warning'}, paid:{label:'Оплачен',color:'success'} };
+
+function renderTable(data) {
+  const tbody = document.getElementById('ordersTable');
+  document.getElementById('totalCount').textContent = data.length;
+  document.getElementById('paginationInfo').textContent = `Показано 1–${data.length} из ${data.length}`;
+  if (!data.length) { tbody.innerHTML = `<tr><td colspan="11"><div class="table-empty"><span class="table-empty-icon">📦</span>Заказы не найдены</div></td></tr>`; return; }
+  tbody.innerHTML = data.map(o => {
+    const ds = deliveryLabels[o.deliveryStatus] || { label: o.deliveryStatus, color:'neutral' };
+    const ps = payLabels[o.payStatus] || { label: o.payStatus, color:'neutral' };
+    return `<tr>
+      <td><input type="checkbox" class="table-checkbox row-check" data-id="${o.id}" onchange="toggleRow(${o.id},this)"></td>
+      <td style="font-family:monospace;font-size:12px;color:var(--primary-light);font-weight:600;">${o.track}</td>
+      <td style="font-size:13px;font-weight:600;">${o.client}</td>
+      <td style="font-size:13px;font-weight:600;">${o.weight} кг</td>
+      <td style="font-size:13px;font-weight:700;">${o.total.toLocaleString()} с</td>
+      <td><span class="badge badge-${ds.color}">${ds.label}</span></td>
+      <td><span class="badge badge-${ps.color}">${ps.label}</span></td>
+      <td style="font-size:12px;color:var(--text-muted);">${ZeaUtils.formatDate(o.created)}</td>
+      <td>
+        <div class="table-actions">
+          <a href="detail.html?id=${o.id}" class="btn btn-ghost btn-icon-sm" title="Открыть">👁</a>
+          <button class="btn btn-ghost btn-icon-sm" title="Статус" onclick="openStatusModal(${o.id},'${o.track}','${o.deliveryStatus}')">🔄</button>
+          <button class="btn btn-ghost btn-icon-sm" title="Уведомить" onclick="notifyClient(${o.id})">🔔</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterByStatus(status, el) {
+  document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentStatusFilter = status;
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const pay = document.getElementById('payFilter').value;
+  filtered = orders.filter(o => {
+    const text = `${o.track} ${o.client}`.toLowerCase();
+    if (q && !text.includes(q)) return false;
+    if (pay && o.payStatus !== pay) return false;
+    if (currentStatusFilter !== 'all' && o.deliveryStatus !== currentStatusFilter) return false;
+    return true;
+  });
+  renderTable(filtered);
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('payFilter').value = '';
+  document.getElementById('shopFilter').value = '';
+  currentStatusFilter = 'all';
+  document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.status-tab[data-status="all"]').classList.add('active');
+  applyFilters();
+}
+
+function toggleSelectAll(cb) {
+  document.querySelectorAll('.row-check').forEach(c => { c.checked = cb.checked; cb.checked ? selectedIds.add(parseInt(c.dataset.id)) : selectedIds.delete(parseInt(c.dataset.id)); });
+  updateBulk();
+}
+function toggleRow(id, cb) { cb.checked ? selectedIds.add(id) : selectedIds.delete(id); updateBulk(); }
+function updateBulk() { const bar = document.getElementById('bulkBar'); bar.classList.toggle('visible', selectedIds.size > 0); document.getElementById('bulkCount').textContent = `${selectedIds.size} выбрано`; }
+function clearSelection() { selectedIds.clear(); document.querySelectorAll('.row-check, #selectAll').forEach(c => c.checked = false); updateBulk(); }
+
+function bulkUpdateStatus() {
+  const status = document.getElementById('bulkStatus').value;
+  if (!status) { Toast.warning('Выберите статус'); return; }
+  const ds = deliveryLabels[status];
+  orders.forEach(o => { if (selectedIds.has(o.id)) o.deliveryStatus = status; });
+  applyFilters();
+  clearSelection();
+  Toast.success(`Статус обновлён: ${ds?.label}`, `${selectedIds.size || 'Выбранные'} заказов`);
+}
+
+function openStatusModal(id, track, current) {
+  statusModalTarget = id;
+  document.getElementById('statusModalTrack').textContent = track;
+  document.getElementById('newStatus').value = current;
+  Modal.open('statusModal');
+}
+
+function applyStatusChange() {
+  const status = document.getElementById('newStatus').value;
+  const order = orders.find(o => o.id === statusModalTarget);
+  if (order) { order.deliveryStatus = status; }
+  applyFilters();
+  Modal.close('statusModal');
+  Toast.success('Статус изменён', deliveryLabels[status]?.label);
+}
+
+function notifyClient(id) {
+  const o = orders.find(x => x.id === id);
+  Toast.success('Уведомление отправлено', `Клиент: ${o?.client}`);
+}
+
+document.getElementById('searchInput').addEventListener('input', ZeaUtils.debounce(applyFilters, 250));
+renderTable(orders);
+</script>
+</body>
+</html>

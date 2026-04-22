@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Настройки — ZeaCargo CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/global.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/animations.css">
+  <style>
+    .settings-layout { display:grid; grid-template-columns:240px 1fr; gap:20px; align-items:start; }
+    .settings-nav { background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-xl); padding:8px; position:sticky; top:calc(var(--header-height)+24px); }
+    .settings-nav-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--radius-lg); font-size:14px; font-weight:500; color:var(--text-muted); cursor:pointer; transition:all .15s; }
+    .settings-nav-item:hover { background:var(--bg-hover); color:var(--text-primary); }
+    .settings-nav-item.active { background:rgba(108,99,255,0.1); color:var(--primary-light); font-weight:600; }
+    .settings-panel { display:none; }
+    .settings-panel.active { display:block; }
+    .toggle-label { display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--border-subtle); }
+    .toggle-label:last-child { border-bottom:none; }
+    .toggle-info { }
+    .toggle-title { font-size:14px; font-weight:600; color:var(--text-primary); }
+    .toggle-sub { font-size:12px; color:var(--text-muted); margin-top:2px; }
+    .toggle { width:48px; height:26px; background:var(--bg-elevated); border:1px solid var(--border-default); border-radius:99px; position:relative; cursor:pointer; transition:all .2s; flex-shrink:0; }
+    .toggle.on { background:var(--primary); border-color:var(--primary); }
+    .toggle-thumb { width:20px; height:20px; background:#fff; border-radius:50%; position:absolute; top:2px; left:2px; transition:left .2s; box-shadow:0 2px 4px rgba(0,0,0,.3); }
+    .toggle.on .toggle-thumb { left:24px; }
+    .operator-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border-subtle); }
+    .operator-row:last-child { border-bottom:none; }
+    @media(max-width:900px){ .settings-layout{ grid-template-columns:1fr; } .settings-nav{ position:static; } }
+  </style>
+</head>
+<body class="bg-mesh">
+
+<aside class="sidebar" id="sidebar">
+  <a href="../../index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">📦</div>
+    <div class="sidebar-logo-text"><div class="sidebar-logo-title">ZeaCargo</div><div class="sidebar-logo-sub">RusCargo KZ</div></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Главное</div>
+      <a href="../../crm/dashboard.html" class="sidebar-link"><span class="sidebar-link-icon">📊</span><span class="sidebar-link-text">Дашборд</span></a>
+      <a href="../../crm/clients/index.html" class="sidebar-link"><span class="sidebar-link-icon">👥</span><span class="sidebar-link-text">Клиенты</span></a>
+      <a href="../../crm/orders/index.html" class="sidebar-link"><span class="sidebar-link-icon">📦</span><span class="sidebar-link-text">Заказы</span><span class="sidebar-link-badge">12</span></a>
+      <a href="../../crm/groups/index.html" class="sidebar-link"><span class="sidebar-link-icon">📁</span><span class="sidebar-link-text">Группы</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Финансы</div>
+      <a href="../../crm/finance/index.html" class="sidebar-link"><span class="sidebar-link-icon">💰</span><span class="sidebar-link-text">Финансы</span></a>
+      <a href="../../crm/finance/fines.html" class="sidebar-link"><span class="sidebar-link-icon">⚠️</span><span class="sidebar-link-text">Штрафы</span><span class="sidebar-link-badge">7</span></a>
+      <a href="../../crm/finance/payments.html" class="sidebar-link"><span class="sidebar-link-icon">📝</span><span class="sidebar-link-text">Оплаты</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Операции</div>
+      <a href="../../crm/notifications/index.html" class="sidebar-link"><span class="sidebar-link-icon">🔔</span><span class="sidebar-link-text">Уведомления</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Система</div>
+      <a href="../../crm/settings/index.html" class="sidebar-link active"><span class="sidebar-link-icon">⚙️</span><span class="sidebar-link-text">Настройки</span></a>
+      <a href="../../auth/login.html" class="sidebar-link"><span class="sidebar-link-icon">🚪</span><span class="sidebar-link-text">Выйти</span></a>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../../crm/settings/index.html" class="sidebar-user">
+      <div class="sidebar-user-avatar">АИ</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Алексей Иванов</div><div class="sidebar-user-role">Администратор</div></div>
+    </a>
+  </div>
+</aside>
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <button class="topbar-collapse-btn" data-sidebar-toggle>☰</button>
+    <div class="topbar-breadcrumb"><a href="../dashboard.html" style="color:var(--text-muted);text-decoration:none;">CRM</a><span style="color:var(--text-muted);">/</span><span>Настройки</span></div>
+  </div>
+  <div class="topbar-right"><button class="topbar-btn">🔔<span class="topbar-notification-dot"></span></button></div>
+</header>
+
+<div class="app-layout">
+  <div class="main-content" id="mainContent">
+    <div class="page-content">
+      <div class="page-header animate-fade-up">
+        <div><h1>Настройки компании</h1><p>RusCargo KZ — RU-001</p></div>
+      </div>
+
+      <div class="settings-layout animate-fade-up delay-100">
+        <!-- Nav -->
+        <div class="settings-nav">
+          <div class="settings-nav-item active" onclick="showPanel('company',this)">🏢 О компании</div>
+          <div class="settings-nav-item" onclick="showPanel('tariff',this)">💰 Тарифы</div>
+          <div class="settings-nav-item" onclick="showPanel('bot',this)">🤖 Telegram-бот</div>
+          <div class="settings-nav-item" onclick="showPanel('operators',this)">👥 Операторы</div>
+          <div class="settings-nav-item" onclick="showPanel('notifications',this)">🔔 Уведомления</div>
+          <div class="settings-nav-item" onclick="showPanel('warehouses',this)">📍 Склады</div>
+          <div class="settings-nav-item" onclick="showPanel('profile',this)">👤 Мой профиль</div>
+        </div>
+
+        <!-- Panels -->
+        <div>
+          <!-- Company -->
+          <div class="settings-panel active card" id="panel-company">
+            <div class="card-header"><div class="card-title">🏢 Информация о компании</div><button class="btn btn-primary btn-sm" onclick="saveSection('Компания')">💾 Сохранить</button></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;">
+              <div class="form-group"><label class="form-label">Название компании</label><input class="form-control" value="RusCargo KZ"></div>
+              <div class="form-group"><label class="form-label">Код компании</label><input class="form-control" value="RU-001" readonly style="opacity:.6;"></div>
+              <div class="form-group"><label class="form-label">Телефон</label><input class="form-control" value="+7 707 456 7890"></div>
+              <div class="form-group"><label class="form-label">Email</label><input class="form-control" value="info@ruscargo.kz"></div>
+              <div class="form-group" style="grid-column:1/-1;"><label class="form-label">Адрес офиса</label><input class="form-control" value="г. Алматы, ул. Абая 15, офис 301"></div>
+              <div class="form-group" style="grid-column:1/-1;"><label class="form-label">Описание / Сайт</label><input class="form-control" value="ruscargo.kz"></div>
+              <div class="form-group" style="grid-column:1/-1;"><label class="form-label">Рабочее время</label><input class="form-control" value="Пн-Сб 09:00-18:00"></div>
+            </div>
+          </div>
+
+          <!-- Tariff -->
+          <div class="settings-panel card" id="panel-tariff">
+            <div class="card-header"><div class="card-title">💰 Тарифы на доставку</div><button class="btn btn-primary btn-sm" onclick="saveSection('Тарифы')">💾 Сохранить</button></div>
+            <div style="margin-top:8px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;">
+                <div class="form-group"><label class="form-label">Базовая цена/кг (сом)</label><input class="form-control" type="number" value="800"></div>
+                <div class="form-group"><label class="form-label">Размер штрафа (сом/день)</label><input class="form-control" type="number" value="50"></div>
+                <div class="form-group"><label class="form-label">Штраф начисляется через (дней)</label><input class="form-control" type="number" value="3"></div>
+              </div>
+              <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text-secondary);">Расширенные тарифы по весу</div>
+              <div class="table-container">
+                <table>
+                  <thead><tr><th>От (кг)</th><th>До (кг)</th><th>Цена/кг (сом)</th><th>Направление</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td><input class="form-control" style="padding:6px 10px;" value="0"></td><td><input class="form-control" style="padding:6px 10px;" value="1"></td><td><input class="form-control" style="padding:6px 10px;" value="900"></td><td><input class="form-control" style="padding:6px 10px;" value="Китай→КР"></td><td><button class="btn btn-ghost btn-icon-sm">🗑</button></td></tr>
+                    <tr><td><input class="form-control" style="padding:6px 10px;" value="1"></td><td><input class="form-control" style="padding:6px 10px;" value="5"></td><td><input class="form-control" style="padding:6px 10px;" value="800"></td><td><input class="form-control" style="padding:6px 10px;" value="Китай→КР"></td><td><button class="btn btn-ghost btn-icon-sm">🗑</button></td></tr>
+                    <tr><td><input class="form-control" style="padding:6px 10px;" value="5"></td><td><input class="form-control" style="padding:6px 10px;" value="∞"></td><td><input class="form-control" style="padding:6px 10px;" value="750"></td><td><input class="form-control" style="padding:6px 10px;" value="Китай→КР"></td><td><button class="btn btn-ghost btn-icon-sm">🗑</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <button class="btn btn-ghost btn-sm" style="margin-top:12px;" onclick="Toast.info('Строка добавлена')">+ Добавить строку</button>
+            </div>
+          </div>
+
+          <!-- Bot -->
+          <div class="settings-panel card" id="panel-bot">
+            <div class="card-header"><div class="card-title">🤖 Настройки Telegram-бота</div><button class="btn btn-primary btn-sm" onclick="saveSection('Бот')">💾 Сохранить</button></div>
+            <div style="margin-top:8px;">
+              <div class="form-group"><label class="form-label">Bot Token <span class="required">*</span></label>
+                <div class="input-group"><span class="input-group-icon">🔑</span><input type="password" class="form-control" value="1234567890:AAHkHm...Rk4aQ"></div></div>
+              <div class="form-group"><label class="form-label">Username бота</label><input class="form-control" value="@RusCargoKZ_bot" readonly style="opacity:.6;color:var(--primary-light);"></div>
+              <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-lg);padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+                <span style="font-size:18px;">✅</span>
+                <div><div style="font-size:13px;font-weight:600;color:var(--success-light);">Бот подключён и активен</div><div style="font-size:12px;color:var(--text-muted);">Последняя проверка: 2 мин назад</div></div>
+              </div>
+              <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Авто-уведомления</div>
+              <div class="toggle-label">
+                <div class="toggle-info"><div class="toggle-title">При изменении статуса заказа</div><div class="toggle-sub">Клиент получает сообщение при каждом обновлении</div></div>
+                <div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div>
+              </div>
+              <div class="toggle-label">
+                <div class="toggle-info"><div class="toggle-title">Готов к выдаче</div><div class="toggle-sub">Уведомление когда заказ можно забрать</div></div>
+                <div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div>
+              </div>
+              <div class="toggle-label">
+                <div class="toggle-info"><div class="toggle-title">Напоминание о долге</div><div class="toggle-sub">Еженедельное авто-напоминание должникам</div></div>
+                <div class="toggle" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Operators -->
+          <div class="settings-panel card" id="panel-operators">
+            <div class="card-header"><div class="card-title">👥 Операторы</div><button class="btn btn-primary btn-sm" data-modal-open="addOpModal">+ Добавить</button></div>
+            <div style="margin-top:8px;">
+              <div class="operator-row">
+                <div class="avatar avatar-md" style="background:linear-gradient(135deg,#6C63FF,#5248CC);">АИ</div>
+                <div style="flex:1;"><div style="font-size:14px;font-weight:700;">Алексей Иванов</div><div style="font-size:12px;color:var(--text-muted);">admin@ruscargo.kz · Администратор</div></div>
+                <span class="badge badge-success">Активен</span>
+                <button class="btn btn-ghost btn-sm">✏️</button>
+              </div>
+              <div class="operator-row">
+                <div class="avatar avatar-md" style="background:linear-gradient(135deg,#10B981,#059669);">МС</div>
+                <div style="flex:1;"><div style="font-size:14px;font-weight:700;">Маргарита Скворцова</div><div style="font-size:12px;color:var(--text-muted);">op1@ruscargo.kz · Оператор</div></div>
+                <span class="badge badge-success">Активен</span>
+                <button class="btn btn-ghost btn-sm">✏️</button>
+              </div>
+              <div class="operator-row">
+                <div class="avatar avatar-md" style="background:linear-gradient(135deg,#F59E0B,#D97706);">ДК</div>
+                <div style="flex:1;"><div style="font-size:14px;font-weight:700;">Данияр Каримов</div><div style="font-size:12px;color:var(--text-muted);">logist@ruscargo.kz · Логист</div></div>
+                <span class="badge badge-neutral">Неактивен</span>
+                <button class="btn btn-ghost btn-sm">✏️</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notifications settings -->
+          <div class="settings-panel card" id="panel-notifications">
+            <div class="card-header"><div class="card-title">🔔 Настройки уведомлений</div><button class="btn btn-primary btn-sm" onclick="saveSection('Уведомления')">💾 Сохранить</button></div>
+            <div style="margin-top:8px;">
+              <div class="toggle-label"><div class="toggle-info"><div class="toggle-title">Новый заказ</div><div class="toggle-sub">Уведомления при создании нового заказа</div></div><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div></div>
+              <div class="toggle-label"><div class="toggle-info"><div class="toggle-title">Новая оплата</div><div class="toggle-sub">Получать уведомления при каждом платеже</div></div><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div></div>
+              <div class="toggle-label"><div class="toggle-info"><div class="toggle-title">Новая заявка на выкуп</div><div class="toggle-sub">Уведомление при поступлении заявки</div></div><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div></div>
+              <div class="toggle-label"><div class="toggle-info"><div class="toggle-title">Ежедневный отчёт</div><div class="toggle-sub">Итоговая сводка на email в конце дня</div></div><div class="toggle" onclick="toggleSwitch(this)"><div class="toggle-thumb"></div></div></div>
+            </div>
+          </div>
+
+          <!-- Warehouses -->
+          <div class="settings-panel card" id="panel-warehouses">
+            <div class="card-header"><div class="card-title">📍 Адреса складов</div><button class="btn btn-primary btn-sm" onclick="Toast.info('Склад','Добавлен тестовый склад')">+ Добавить</button></div>
+            <div style="margin-top:8px;display:flex;flex-direction:column;gap:16px;">
+              <div style="background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:16px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:14px;font-weight:700;">🇨🇳 Склад в Китае (Гуанчжоу)</span><span class="badge badge-success">Активен</span></div>
+                <div style="font-size:13px;color:var(--text-muted);">Guangzhou Baiyun District, 510410 · Контакт: WeChat cargo_cn123</div>
+              </div>
+              <div style="background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:16px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:14px;font-weight:700;">🇰🇿 Склад в Алматы</span><span class="badge badge-success">Активен</span></div>
+                <div style="font-size:13px;color:var(--text-muted);">г. Алматы, ул. Промышленная 12 · Тел: +7 707 456 7890</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile -->
+          <div class="settings-panel card" id="panel-profile">
+            <div class="card-header"><div class="card-title">👤 Мой профиль</div><button class="btn btn-primary btn-sm" onclick="saveSection('Профиль')">💾 Сохранить</button></div>
+            <div style="margin-top:8px;">
+              <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border-subtle);">
+                <div class="avatar" style="width:72px;height:72px;border-radius:16px;background:linear-gradient(135deg,#6C63FF,#5248CC);font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center;color:#fff;">АИ</div>
+                <div>
+                  <div style="font-size:18px;font-weight:800;">Алексей Иванов</div>
+                  <div style="font-size:13px;color:var(--text-muted);">Администратор · RusCargo KZ</div>
+                  <button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="Toast.info('Фото','Загрузка фото недоступна в демо')">📷 Изменить фото</button>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="form-group"><label class="form-label">Имя</label><input class="form-control" value="Алексей"></div>
+                <div class="form-group"><label class="form-label">Фамилия</label><input class="form-control" value="Иванов"></div>
+                <div class="form-group"><label class="form-label">Email</label><input class="form-control" value="admin@ruscargo.kz"></div>
+                <div class="form-group"><label class="form-label">Телефон</label><input class="form-control" value="+7 707 111 2233"></div>
+              </div>
+              <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-subtle);">
+                <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Изменить пароль</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                  <div class="form-group"><label class="form-label">Текущий пароль</label><input type="password" class="form-control" placeholder="••••••••"></div>
+                  <div class="form-group"><label class="form-label">Новый пароль</label><input type="password" class="form-control" placeholder="••••••••"></div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="Toast.success('Пароль изменён!')">Сменить пароль</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ADD OPERATOR MODAL -->
+<div class="modal-overlay" id="addOpModal">
+  <div class="modal modal-sm">
+    <div class="modal-header"><div class="modal-title">Добавить оператора</div><button class="modal-close" data-modal-close>✕</button></div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="form-group"><label class="form-label">Имя</label><input class="form-control"></div>
+        <div class="form-group"><label class="form-label">Фамилия</label><input class="form-control"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control"></div>
+      <div class="form-group" style="margin-bottom:0;"><label class="form-label">Роль</label>
+        <select class="form-control"><option>Оператор</option><option>Логист</option><option>Бухгалтер</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Отмена</button>
+      <button class="btn btn-primary" onclick="Modal.close('addOpModal'); Toast.success('Оператор добавлен!')">Добавить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../../assets/js/app.js"></script>
+<script>
+function showPanel(id, el) {
+  document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.settings-nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`panel-${id}`).classList.add('active');
+  el.classList.add('active');
+}
+function toggleSwitch(el) { el.classList.toggle('on'); }
+function saveSection(name) { Toast.success(`${name} сохранено!`); }
+</script>
+</body>
+</html>
