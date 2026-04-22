@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'apps.base',
     'apps.cms',
     'apps.contacts',
+    'apps.clients',
+    'apps.orders',
 ]
 
 # =============================================================================
