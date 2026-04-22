@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.template.loader import get_template
 
 def home(request):
@@ -16,6 +16,30 @@ def crm_dashboard(request):
 
 def superadmin_dashboard(request):
     return render(request, "superadmin/dashboard.html")
+
+
+def crm_dashboard_alias(request):
+    return redirect("crm_dashboard")
+
+
+def superadmin_dashboard_alias(request):
+    return redirect("superadmin_dashboard")
+
+
+def superadmin_settings_alias(request):
+    return redirect("/superadmin/settings.html")
+
+
+def superadmin_companies_alias(request):
+    return redirect("/superadmin/companies.html")
+
+
+def client_catalog_alias(request):
+    return redirect("/client/catalog.html")
+
+
+def bot_simulator_alias(request):
+    return redirect("/bot/simulator.html")
 
 
 def section_page(request, section, page):

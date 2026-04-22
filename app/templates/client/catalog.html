@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог Клиента | ZeaCargo</title>
+  <link rel="stylesheet" href="{% static 'assets/css/global.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/animations.css' %}">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(108,99,255,0.18), transparent 30%),
+        linear-gradient(180deg, #091020, #0f1830);
+      color: #f5f7fb;
+    }
+    .page {
+      width: min(1080px, calc(100% - 32px));
+      margin: 32px auto;
+    }
+    .hero, .panel {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 28px;
+    }
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .hero h1, .panel h2 { margin-top: 0; }
+    .hero p, .panel p, .panel li { color: rgba(245,247,251,0.74); }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .card {
+      background: rgba(7,11,22,0.52);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .card-title { font-weight: 700; margin-bottom: 8px; }
+    @media (max-width: 860px) {
+      .hero { flex-direction: column; align-items: flex-start; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>Каталог товаров</h1>
+        <p>Эта кнопка теперь ведет на живую страницу внутри текущего Django-проекта, а не в 404.</p>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-secondary" href="/index.html">На главную</a>
+        <a class="btn btn-primary" href="/auth/login.html">Войти</a>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>Что дальше</h2>
+      <p>Сейчас это рабочая точка входа для клиентского раздела. Сюда уже можно безопасно вести кнопки с лендинга и футера.</p>
+      <div class="grid">
+        <article class="card">
+          <div class="card-title">Просмотр каталога</div>
+          <div>Подготовлено место для витрины товаров клиента.</div>
+        </article>
+        <article class="card">
+          <div class="card-title">Заявки на выкуп</div>
+          <div>Следующим шагом можно подключить форму заявки и историю обращений.</div>
+        </article>
+        <article class="card">
+          <div class="card-title">Связь с CRM</div>
+          <div>Страницу можно связать с существующим CRM-разделом без слома навигации.</div>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

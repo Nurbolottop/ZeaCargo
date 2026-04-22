@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram Бот | ZeaCargo</title>
+  <link rel="stylesheet" href="{% static 'assets/css/global.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/animations.css' %}">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(59,130,246,0.2), transparent 28%),
+        linear-gradient(180deg, #07111f, #0d1728);
+      color: #f5f7fb;
+    }
+    .page {
+      width: min(1080px, calc(100% - 32px));
+      margin: 32px auto;
+    }
+    .hero, .panel {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 28px;
+    }
+    .hero {
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .chat {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+    .bubble {
+      max-width: 520px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(7,11,22,0.55);
+      border: 1px solid rgba(255,255,255,0.07);
+      color: rgba(245,247,251,0.8);
+    }
+    .bubble.right {
+      margin-left: auto;
+      background: rgba(59,130,246,0.18);
+      border-color: rgba(59,130,246,0.28);
+    }
+    @media (max-width: 860px) {
+      .hero { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <h1>Telegram-бот</h1>
+        <p>Страница подключена в роутинг и открывается по кнопке с сайта без 404.</p>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-secondary" href="/index.html">На главную</a>
+        <a class="btn btn-primary" href="/auth/login.html">Открыть вход</a>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>Пример сценария</h2>
+      <div class="chat">
+        <div class="bubble right">Где моя посылка CN2024110001?</div>
+        <div class="bubble">Посылка в пути. Последнее обновление: склад консолидации.</div>
+        <div class="bubble right">Покажи долги и оплаты</div>
+        <div class="bubble">Можно показать задолженность, уведомления и статус заказа после подключения данных CRM.</div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
