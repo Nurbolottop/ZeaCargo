@@ -1,3 +1,4 @@
+
 from types import SimpleNamespace
 
 from django.db.utils import OperationalError, ProgrammingError
